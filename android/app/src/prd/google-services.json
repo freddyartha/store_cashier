@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "207373945800",
+    "project_id": "store-cashier",
+    "storage_bucket": "store-cashier.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207373945800:android:6f83f7e4d80c16b41bcefd",
+        "android_client_info": {
+          "package_name": "com.freddydev.store_cashier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207373945800-qjoorivrhtqhvg773ap8gop1qb3j382b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.freddydev.store_cashier",
+            "certificate_hash": "179eb812b04b187ce6b4283648aace1b5c3fe3a4"
+          }
+        },
+        {
+          "client_id": "207373945800-oejog1f5sgq3rjga01kmv2214j61e84v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhN5AgWBibsgK_2ES2mkUt83IiQ6Cl3kI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207373945800-oejog1f5sgq3rjga01kmv2214j61e84v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "207373945800-48ulr2io5asme5o8t8j3sdart0cdi95o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.freddydev.storeCashier"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

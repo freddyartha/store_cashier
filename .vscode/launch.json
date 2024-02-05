@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dev_store_cashier",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "dev"
+            ]
+        },
+        {
+            "name": "stg_store_cashier",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "stg"
+            ]
+        },
+        {
+            "name": "prd_store_cashier",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "prd"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "110810588097",
+    "project_id": "store-cashier-stg",
+    "storage_bucket": "store-cashier-stg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110810588097:android:a7a66b393f483bdbddc540",
+        "android_client_info": {
+          "package_name": "com.freddydev.store_cashier.stg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "110810588097-2s967ia2n76inn9cso108g75tukbe765.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.freddydev.store_cashier.stg",
+            "certificate_hash": "179eb812b04b187ce6b4283648aace1b5c3fe3a4"
+          }
+        },
+        {
+          "client_id": "110810588097-tpb3c87ovja5mishemmkg193guv6u43p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd1p86KD71D2mKChtGxEfiz_dIXdw1Aag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "110810588097-tpb3c87ovja5mishemmkg193guv6u43p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "110810588097-0n5ttmffson0at9q4o26dlifn3vk47tj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.freddydev.storeCashier.stg"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
