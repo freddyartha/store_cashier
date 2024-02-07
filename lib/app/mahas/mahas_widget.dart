@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:store_cashier/app/mahas/components/buttons/button_component.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
 import 'package:store_cashier/app/mahas/components/mahas_themes.dart';
 import 'package:store_cashier/app/mahas/components/others/two_row_component.dart';
@@ -138,16 +139,17 @@ class MahasWidget {
         : InstructionWidget(message: message, textColor: textColor);
   }
 
-  static Widget safeAreaWidget(
-      {bool connectionStatus = true, Widget? child, Color? color}) {
+  static Widget safeAreaWidget({
+    bool connectionStatus = true,
+    Widget? child,
+  }) {
     return Container(
-      color: color ?? MahasColors.backgroundColor,
+      color:
+          connectionStatus ? MahasColors.primary : MahasColors.backgroundColor,
       child: SafeArea(
         bottom: false,
         child: Container(
-          color: connectionStatus
-              ? MahasColors.primary
-              : MahasColors.backgroundColor,
+          color: MahasColors.backgroundColor,
           child: SafeArea(
             child: child ?? hideWidget(),
           ),
@@ -195,6 +197,47 @@ class MahasWidget {
           fontSize: MahasFontSize.h5,
         ),
       ],
+    );
+  }
+
+  static Widget horizontalTwoButtonWidget({
+    required dynamic Function() leftButtonOnTap,
+    required dynamic Function() rightButtonOnTap,
+    String leftButtonText = "Kembali",
+    String rightButtonText = "Simpan",
+  }) {
+    return SizedBox(
+      height: 45,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Flexible(
+            child: ButtonComponent(
+              text: leftButtonText,
+              isMultilineText: false,
+              borderColor: MahasColors.primary,
+              btnColor: MahasColors.light,
+              textColor: MahasColors.primary,
+              borderRadius: MahasThemes.borderRadius / 2,
+              fontSize: MahasFontSize.h6,
+              fontWeight: FontWeight.w600,
+              onTap: leftButtonOnTap,
+            ),
+          ),
+          const SizedBox(width: 15),
+          Flexible(
+            child: ButtonComponent(
+              text: rightButtonText,
+              isMultilineText: false,
+              fontSize: MahasFontSize.h6,
+              fontWeight: FontWeight.w600,
+              btnColor: MahasColors.primary,
+              borderRadius: MahasThemes.borderRadius / 2,
+              onTap: rightButtonOnTap,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

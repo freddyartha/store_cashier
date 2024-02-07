@@ -19,7 +19,6 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return MahasWidget.safeAreaWidget(
-      color: MahasColors.primary,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
@@ -109,24 +108,6 @@ class LoginView extends GetView<LoginController> {
                               onPressed: controller.appleLoginOnPress,
                               type: LoginButtonType.apple,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const TextComponent(
-                                value: "Belum punya akun?  ",
-                                fontWeight: FontWeight.w500,
-                              ),
-                              TextComponent(
-                                onTap: controller.goToRegister,
-                                value: "Register",
-                                fontColor: MahasColors.link,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ],
                           ),
                         ],
                       ),

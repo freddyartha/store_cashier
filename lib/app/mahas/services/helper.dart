@@ -8,7 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:store_cashier/app/mahas/mahas_font_size.dart';
 import 'package:uuid/uuid.dart';
 
 import '../components/buttons/button_component.dart';
@@ -74,44 +73,15 @@ class Helper {
         ),
         actions: [
           const Divider(color: MahasColors.lightBorderColor),
-          IntrinsicHeight(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Flexible(
-                    child: ButtonComponent(
-                      text: textCancel ?? "Batal",
-                      isMultilineText: true,
-                      borderColor: MahasColors.primary,
-                      btnColor: MahasColors.light,
-                      textColor: MahasColors.dark,
-                      borderRadius: 3,
-                      fontSize: MahasFontSize.normal,
-                      fontWeight: FontWeight.w600,
-                      onTap: () {
-                        Get.back(result: false);
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Flexible(
-                    child: ButtonComponent(
-                      text: textConfirm ?? "Submit",
-                      isMultilineText: true,
-                      fontSize: MahasFontSize.normal,
-                      fontWeight: FontWeight.w600,
-                      borderRadius: 3,
-                      btnColor: MahasColors.primary,
-                      onTap: () {
-                        Get.back(result: true);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          MahasWidget.horizontalTwoButtonWidget(
+            leftButtonText: textCancel ?? "Batal",
+            rightButtonText: textConfirm ?? "Submit",
+            leftButtonOnTap: () {
+              Get.back(result: false);
+            },
+            rightButtonOnTap: () {
+              Get.back(result: true);
+            },
           ),
         ],
       ),
@@ -152,44 +122,15 @@ class Helper {
             const EdgeInsets.only(top: 10, bottom: 5, left: 20, right: 20),
         actions: [
           const Divider(color: MahasColors.lightBorderColor),
-          IntrinsicHeight(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Flexible(
-                    child: ButtonComponent(
-                      text: textCancel ?? "Close",
-                      isMultilineText: true,
-                      borderColor: MahasColors.primary,
-                      btnColor: MahasColors.light,
-                      textColor: MahasColors.dark,
-                      borderRadius: 3,
-                      fontSize: MahasFontSize.normal,
-                      fontWeight: FontWeight.w600,
-                      onTap: () {
-                        Get.back(result: false);
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Flexible(
-                    child: ButtonComponent(
-                      text: textConfirm ?? "OK",
-                      isMultilineText: true,
-                      fontSize: MahasFontSize.normal,
-                      fontWeight: FontWeight.w600,
-                      borderRadius: 3,
-                      btnColor: MahasColors.primary,
-                      onTap: () {
-                        Get.back(result: true);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          MahasWidget.horizontalTwoButtonWidget(
+            leftButtonText: textCancel ?? "Close",
+            rightButtonText: textConfirm ?? "OK",
+            leftButtonOnTap: () {
+              Get.back(result: false);
+            },
+            rightButtonOnTap: () {
+              Get.back(result: true);
+            },
           ),
         ],
       ),

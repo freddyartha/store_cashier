@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:store_cashier/app/mahas/components/buttons/button_component.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
 import 'package:store_cashier/app/mahas/components/texts/text_component.dart';
 import 'package:store_cashier/app/mahas/mahas_colors.dart';
@@ -16,7 +15,6 @@ class RegisterView extends GetView<RegisterController> {
   Widget build(BuildContext context) {
     return Obx(
       () => MahasWidget.safeAreaWidget(
-        color: MahasColors.primary,
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           body: SizedBox(
@@ -39,41 +37,13 @@ class RegisterView extends GetView<RegisterController> {
                                 fontSize: MahasFontSize.h6,
                                 margin: EdgeInsets.only(bottom: 20),
                               ),
-                              SizedBox(
-                                height: 45,
-                                child: Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Flexible(
-                                      child: ButtonComponent(
-                                        text: "Belum",
-                                        isMultilineText: true,
-                                        borderColor: MahasColors.primary,
-                                        btnColor: MahasColors.light,
-                                        textColor: MahasColors.dark,
-                                        borderRadius: 3,
-                                        fontSize: MahasFontSize.normal,
-                                        fontWeight: FontWeight.w600,
-                                        onTap: () =>
-                                            controller.companyOnTap(false),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 15),
-                                    Flexible(
-                                      child: ButtonComponent(
-                                        text: "Sudah",
-                                        isMultilineText: true,
-                                        fontSize: MahasFontSize.normal,
-                                        fontWeight: FontWeight.w600,
-                                        borderRadius: 3,
-                                        btnColor: MahasColors.primary,
-                                        onTap: () =>
-                                            controller.companyOnTap(true),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              MahasWidget.horizontalTwoButtonWidget(
+                                leftButtonOnTap: () =>
+                                    controller.companyOnTap(false),
+                                rightButtonOnTap: () =>
+                                    controller.companyOnTap(true),
+                                leftButtonText: "Belum",
+                                rightButtonText: "Sudah",
                               ),
                             ],
                           ),
@@ -82,62 +52,34 @@ class RegisterView extends GetView<RegisterController> {
                     : controller.isInitDone.value &&
                             controller.alreadyHaveCompany.value
                         ? MahasWidget.uniformCardWidget(
-                          padding: const EdgeInsets.all(15),
+                            padding: const EdgeInsets.all(15),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                            children: [
-                              InputTextComponent(
-                                controller: controller.idPerusahaanCon,
-                                isRequired: true,
-                                label: "Masukkan ID Perusahaan",
-                                isBorderRectangle: true,
-                                marginBottom: 30,
-                              ),
-                              SizedBox(
-                                height: 45,
-                                child: Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Flexible(
-                                      child: ButtonComponent(
-                                        text: "Kembali",
-                                        isMultilineText: true,
-                                        borderColor: MahasColors.primary,
-                                        btnColor: MahasColors.light,
-                                        textColor: MahasColors.dark,
-                                        borderRadius: 3,
-                                        fontSize: MahasFontSize.normal,
-                                        fontWeight: FontWeight.w600,
-                                        onTap: () {
-                                            controller.isInitDone.value = false;
-                                            controller.alreadyHaveCompany.value = false;
-                                        }
-                                      ),
-                                    ),
-                                    const SizedBox(width: 15),
-                                    Flexible(
-                                      child: ButtonComponent(
-                                        text: "Simpan",
-                                        isMultilineText: true,
-                                        fontSize: MahasFontSize.normal,
-                                        fontWeight: FontWeight.w600,
-                                        borderRadius: 3,
-                                        btnColor: MahasColors.primary,
-                                        onTap: () =>
-                                            controller.companyOnTap(true),
-                                      ),
-                                    ),
-                                  ],
+                              children: [
+                                InputTextComponent(
+                                  controller: controller.idPerusahaanCon,
+                                  isRequired: true,
+                                  label: "Masukkan ID Perusahaan",
+                                  isBorderRectangle: true,
+                                  marginBottom: 30,
                                 ),
-                              ),
-                              const TextComponent(
-                                margin: EdgeInsets.only(top: 20),
-                                value:
-                                    "*ID Perusahaan dapat dilihat di halaman Profile (Home >> Settings >> Profile) pada akun yang Perusahaannya sudah terdaftar",
-                              ),
-                            ],
-                          ),)
+                                MahasWidget.horizontalTwoButtonWidget(
+                                  rightButtonText: "Masukan",
+                                  leftButtonOnTap: () {
+                                    controller.isInitDone.value = false;
+                                    controller.alreadyHaveCompany.value = false;
+                                  },
+                                  rightButtonOnTap:
+                                      controller.namaPerusahaanOnSave,
+                                ),
+                                const TextComponent(
+                                  margin: EdgeInsets.only(top: 20),
+                                  value:
+                                      "*ID Perusahaan dapat dilihat di halaman Profile (Home >> Settings >> Profile) pada akun yang Perusahaannya sudah terdaftar",
+                                ),
+                              ],
+                            ),
+                          )
                         : SingleChildScrollView(
                             physics: const ClampingScrollPhysics(),
                             child: Column(
@@ -177,7 +119,8 @@ class RegisterView extends GetView<RegisterController> {
                                         marginBottom: 10,
                                       ),
                                       InputTextComponent(
-                                        controller: controller.namaPerusahaanCon,
+                                        controller:
+                                            controller.namaPerusahaanCon,
                                         isRequired: true,
                                         label: "Nama Perusahaan",
                                         isBorderRectangle: true,
@@ -191,44 +134,15 @@ class RegisterView extends GetView<RegisterController> {
                                         isBorderRectangle: true,
                                         marginBottom: 10,
                                       ),
-                                      SizedBox(
-                                height: 45,
-                                child: Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Flexible(
-                                      child: ButtonComponent(
-                                        text: "Kembali",
-                                        isMultilineText: true,
-                                        borderColor: MahasColors.primary,
-                                        btnColor: MahasColors.light,
-                                        textColor: MahasColors.dark,
-                                        borderRadius: 3,
-                                        fontSize: MahasFontSize.normal,
-                                        fontWeight: FontWeight.w600,
-                                        onTap: () {
-                                            controller.isInitDone.value = false;
-                                            controller.alreadyHaveCompany.value = false;
-                                        }
+                                      MahasWidget.horizontalTwoButtonWidget(
+                                        leftButtonOnTap: () {
+                                          controller.isInitDone.value = false;
+                                          controller.alreadyHaveCompany.value =
+                                              false;
+                                        },
+                                        rightButtonOnTap:
+                                            controller.registrasiOnSave,
                                       ),
-                                    ),
-                                    const SizedBox(width: 15),
-                                    Flexible(
-                                      child: ButtonComponent(
-                                        text: "Simpan",
-                                        isMultilineText: true,
-                                        fontSize: MahasFontSize.normal,
-                                        fontWeight: FontWeight.w600,
-                                        borderRadius: 3,
-                                        btnColor: MahasColors.primary,
-                                        onTap: () =>
-                                            controller.companyOnTap(true),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                                     ],
                                   ),
                                 ),

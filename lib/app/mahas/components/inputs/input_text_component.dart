@@ -339,7 +339,6 @@ class _InputTextComponentState extends State<InputTextComponent> {
                   ? [
                       FilteringTextInputFormatter.allow(
                           RegExp(r'^(\d+)?\d{0,10}')),
-                      FilteringTextInputFormatter.deny(RegExp(r'^0+')),
                     ]
                   : widget.controller!.type == InputTextType.nrm
                       ? [
@@ -381,17 +380,6 @@ class _InputTextComponentState extends State<InputTextComponent> {
           isRequired: widget.isRequired,
           children: Row(
             children: [
-              Visibility(
-                visible: widget.controller!.type == InputTextType.phone,
-                child: const SizedBox(
-                  width: 40,
-                  child: Center(
-                    child: Text(
-                      '+62',
-                    ),
-                  ),
-                ),
-              ),
               Flexible(
                 child: Form(
                   key: widget.controller!._key,
