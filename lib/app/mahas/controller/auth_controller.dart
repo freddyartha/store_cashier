@@ -9,8 +9,12 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:store_cashier/app/firestore_query/reusable_firestore_query.dart';
+import 'package:store_cashier/app/mahas/mahas_config.dart';
 import 'package:store_cashier/app/mahas/mahas_service.dart';
 import 'package:store_cashier/app/mahas/services/helper.dart';
+import 'package:store_cashier/app/model/company_model.dart';
+import 'package:store_cashier/app/model/user_profile_model.dart';
 
 import '../../routes/app_pages.dart';
 
@@ -31,15 +35,45 @@ class AuthController extends GetxController {
     if (user == null) {
       _toLogin();
     } else {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection("user")
-          .where("email", isEqualTo: user.email)
-          .get();
+      await getProfileandCompany(
+        email: user.email.toString(),
+        afterSucces: _toHome,
+        afterError: _toRegister,
+      );
+    }
+  }
+
+  static Future<void> getProfileandCompany({
+    required String email,
+    dynamic Function()? afterSucces,
+    dynamic Function()? afterError,
+  }) async {
+    try {
+      QuerySnapshot querySnapshot =
+          await FireStoreQuery.tableUser.where("email", isEqualTo: email).get();
       if (querySnapshot.docs.isNotEmpty) {
-        _toHome();
+        MahasConfig.profileModel = UserprofileModel.fromDynamic(
+          querySnapshot.docs.first.data(),
+        );
+        DocumentSnapshot companyGet =
+            await FireStoreQuery.companyByIdUser.get();
+        if (companyGet.exists) {
+          MahasConfig.companyModel =
+              CompanyModel.fromDynamic(companyGet.data());
+          if (afterSucces != null) {
+            afterSucces();
+          }
+        } else {
+          Helper.errorToast(message: "Data Perusahaan Tidak Ditemukan");
+        }
       } else {
-        _toRegister();
+        if (afterError != null) {
+          afterError();
+        }
       }
+    } catch (e) {
+      bool internet = MahasService.isInternetCausedError(e.toString());
+      internet ? Helper.errorToast() : Helper.errorToast(message: e.toString());
     }
   }
 

@@ -4,8 +4,12 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/master_unit_produk/bindings/master_unit_produk_binding.dart';
+import '../modules/master_unit_produk/views/master_unit_produk_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/setting_page/bindings/setting_page_binding.dart';
+import '../modules/setting_page/views/setting_page_view.dart';
 import '../modules/splash_screen/bindings/splash_screen_binding.dart';
 import '../modules/splash_screen/views/splash_screen_view.dart';
 
@@ -38,6 +42,16 @@ class AppPages {
       name: _Paths.REGISTER,
       page: () => const RegisterView(),
       binding: RegisterBinding(),
+    ),
+    GetPage(
+      name: _Paths.SETTING_PAGE,
+      page: () => const SettingPageView(),
+      binding: SettingPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.MASTER_UNIT_PRODUK,
+      page: () => const MasterUnitProdukView(),
+      binding: MasterUnitProdukBinding(),
     ),
   ];
 }

@@ -4,7 +4,7 @@ class MahasColors {
   static TextStyle muted = TextStyle(
     color: Colors.black.withOpacity(.3),
   );
-  static const Color main = Color(0xFFff7900);
+  static const Color main = Color(0xFF35007a);
   static const Color yellow = Color(0xFFffc145);
   static const Color red = Color(0xFFfb5454);
   static const Color grey = Colors.grey;

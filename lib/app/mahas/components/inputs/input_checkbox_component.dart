@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_cashier/app/mahas/components/texts/text_component.dart';
 
 import '../../mahas_colors.dart';
 
@@ -95,11 +96,12 @@ class _InputCheckboxComponentState extends State<InputCheckboxComponent> {
                       widget.controller._onChanged(v, widget.editable),
                 )),
           const Padding(padding: EdgeInsets.only(left: 5)),
-          InkWell(
-            child: Text(
-              widget.label ?? "",
+          Flexible(
+            child: TextComponent(
+              fontSize: 13,
+              value: widget.label ?? "",
+              onTap: () => widget.controller.onTab(widget.editable),
             ),
-            onTap: () => widget.controller.onTab(widget.editable),
           ),
         ],
       ),

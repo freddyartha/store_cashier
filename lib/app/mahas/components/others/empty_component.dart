@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:store_cashier/app/mahas/components/buttons/button_component.dart';
+import 'package:store_cashier/app/mahas/components/mahas_themes.dart';
 import 'package:store_cashier/app/mahas/components/texts/text_component.dart';
 import 'package:store_cashier/app/mahas/mahas_font_size.dart';
 import 'package:store_cashier/app/mahas/mahas_widget.dart';
@@ -23,7 +24,7 @@ class EmptyComponent extends StatelessWidget {
       child: isCard
           ? MahasWidget.uniformCardWidget(
               child: SizedBox(
-                width: Get.width,
+                width: MediaQuery.of(context).size.width,
                 child: EmptyWidget(
                   onPressed: onPressed,
                   textColor: textColor,
@@ -58,7 +59,9 @@ class EmptyWidget extends StatelessWidget {
         children: [
           Image.asset(
             "assets/images/not_found.png",
-            width: Get.width * 0.6,
+            width: MediaQuery.of(context).orientation == Orientation.portrait
+                ? MediaQuery.of(context).size.width * 0.6
+                : MediaQuery.of(context).size.width * 0.3,
           ),
           TextComponent(
             margin: const EdgeInsets.only(top: 30),
@@ -68,20 +71,23 @@ class EmptyWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             fontColor: textColor,
           ),
+          const SizedBox(
+            height: 40,
+          ),
           Visibility(
-            visible: onPressed != null,
-            child: Column(
-              children: [
-                const Padding(padding: EdgeInsets.all(5)),
-                TextButton(
-                  onPressed: onPressed,
-                  child: const Text(
-                    "Refresh",
-                  ),
-                ),
-              ],
+            visible: onPressed != null ? true : false,
+            child: ButtonComponent(
+              onTap: onPressed ?? () {},
+              text: "Refresh",
+              fontSize: MahasFontSize.h6,
+              fontWeight: FontWeight.w600,
+              textColor: textColor,
+              btnColor: MahasColors.primary,
+              borderColor: MahasColors.light,
+              borderRadius: MahasThemes.borderRadius,
+              width: MediaQuery.of(context).size.width,
             ),
-          )
+          ),
         ],
       ),
     );

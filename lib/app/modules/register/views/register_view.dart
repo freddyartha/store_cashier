@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:store_cashier/app/mahas/components/inputs/input_checkbox_component.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
 import 'package:store_cashier/app/mahas/components/texts/text_component.dart';
 import 'package:store_cashier/app/mahas/mahas_colors.dart';
@@ -92,58 +93,69 @@ class RegisterView extends GetView<RegisterController> {
                                   margin: EdgeInsets.only(bottom: 15),
                                 ),
                                 MahasWidget.uniformCardWidget(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      InputTextComponent(
-                                        controller: controller.namaLengkapCon,
-                                        isRequired: true,
-                                        label: "Nama Lengkap",
-                                        isBorderRectangle: true,
-                                        marginBottom: 10,
-                                      ),
-                                      InputTextComponent(
-                                        controller: controller.noHandphoneCon,
-                                        isRequired: true,
-                                        label: "No. Handphone",
-                                        isBorderRectangle: true,
-                                        marginBottom: 10,
-                                      ),
-                                      InputTextComponent(
-                                        controller: controller.alamatCon,
-                                        isRequired: true,
-                                        label: "Alamat",
-                                        isBorderRectangle: true,
-                                        marginBottom: 10,
-                                      ),
-                                      InputTextComponent(
-                                        controller:
-                                            controller.namaPerusahaanCon,
-                                        isRequired: true,
-                                        label: "Nama Perusahaan",
-                                        isBorderRectangle: true,
-                                        marginBottom: 10,
-                                      ),
-                                      InputTextComponent(
-                                        controller:
-                                            controller.alamatPerusahaanCon,
-                                        isRequired: true,
-                                        label: "Alamat Perusahaan",
-                                        isBorderRectangle: true,
-                                        marginBottom: 10,
-                                      ),
-                                      MahasWidget.horizontalTwoButtonWidget(
-                                        leftButtonOnTap: () {
-                                          controller.isInitDone.value = false;
-                                          controller.alreadyHaveCompany.value =
-                                              false;
-                                        },
-                                        rightButtonOnTap:
-                                            controller.registrasiOnSave,
-                                      ),
-                                    ],
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        InputTextComponent(
+                                          controller: controller.namaLengkapCon,
+                                          isRequired: true,
+                                          label: "Nama Lengkap",
+                                          isBorderRectangle: true,
+                                          marginBottom: 10,
+                                        ),
+                                        InputTextComponent(
+                                          controller: controller.noHandphoneCon,
+                                          isRequired: true,
+                                          label: "No. Handphone",
+                                          isBorderRectangle: true,
+                                          marginBottom: 10,
+                                        ),
+                                        InputTextComponent(
+                                          controller: controller.alamatCon,
+                                          isRequired: true,
+                                          label: "Alamat",
+                                          isBorderRectangle: true,
+                                          marginBottom: 10,
+                                        ),
+                                        InputTextComponent(
+                                          controller:
+                                              controller.namaPerusahaanCon,
+                                          isRequired: true,
+                                          label: "Nama Perusahaan",
+                                          isBorderRectangle: true,
+                                          marginBottom: 10,
+                                        ),
+                                        InputCheckboxComponent(
+                                          controller: controller.alamatIsSame,
+                                          label:
+                                              "Alamat Perusahaan sama dengan Alamat Rumah",
+                                          isSwitch: true,
+                                        ),
+                                        Visibility(
+                                          visible: !controller.checked.value,
+                                          child: InputTextComponent(
+                                            controller:
+                                                controller.alamatPerusahaanCon,
+                                            isRequired: true,
+                                            label: "Alamat Perusahaan",
+                                            isBorderRectangle: true,
+                                            marginBottom: 30,
+                                          ),
+                                        ),
+                                        MahasWidget.horizontalTwoButtonWidget(
+                                          leftButtonOnTap: () {
+                                            controller.isInitDone.value = false;
+                                            controller.alreadyHaveCompany.value =
+                                                false;
+                                          },
+                                          rightButtonOnTap:
+                                              controller.registrasiOnSave,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],

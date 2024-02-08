@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:store_cashier/app/firestore_query/reusable_firestore_query.dart';
 import 'package:store_cashier/app/mahas/components/buttons/button_component.dart';
+import 'package:store_cashier/app/mahas/components/inputs/input_checkbox_component.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
 import 'package:store_cashier/app/mahas/components/mahas_themes.dart';
 import 'package:store_cashier/app/mahas/components/texts/text_component.dart';
+import 'package:store_cashier/app/mahas/controller/auth_controller.dart';
 import 'package:store_cashier/app/mahas/mahas_colors.dart';
 import 'package:store_cashier/app/mahas/mahas_config.dart';
 import 'package:store_cashier/app/mahas/mahas_font_size.dart';
 import 'package:store_cashier/app/mahas/mahas_service.dart';
 import 'package:store_cashier/app/mahas/mahas_widget.dart';
 import 'package:store_cashier/app/mahas/services/helper.dart';
+import 'package:store_cashier/app/model/company_model.dart';
+import 'package:store_cashier/app/model/user_profile_model.dart';
 import 'package:store_cashier/app/routes/app_pages.dart';
 
 class RegisterController extends GetxController {
@@ -24,11 +29,21 @@ class RegisterController extends GetxController {
       InputTextController(type: InputTextType.paragraf);
   final InputTextController alamatPerusahaanCon =
       InputTextController(type: InputTextType.paragraf);
+  final InputCheckboxController alamatIsSame = InputCheckboxController();
+  RxBool checked = false.obs;
 
   final InputTextController idPerusahaanCon = InputTextController();
 
   RxBool alreadyHaveCompany = false.obs;
   RxBool isInitDone = false.obs;
+
+  @override
+  void onInit() {
+    alamatIsSame.onChanged = (value){
+      checked.value = value;
+    };
+    super.onInit();
+  }
 
   void companyOnTap(bool already) {
     alreadyHaveCompany.value = already;
@@ -38,9 +53,7 @@ class RegisterController extends GetxController {
   Future<void> namaPerusahaanOnSave() async {
     if (idPerusahaanCon.isValid) {
       MahasService.loadingOverlay(true);
-      var getCompany = MahasConfig.firestore
-          .collection("company")
-          .doc(idPerusahaanCon.value);
+      var getCompany = FireStoreQuery.tableCompany.doc(idPerusahaanCon.value);
 
       DocumentSnapshot querySnapshot = await getCompany.get();
       if (querySnapshot.exists) {
@@ -134,14 +147,17 @@ class RegisterController extends GetxController {
   Future<void> bottomSheetSubmit() async {
     if (namaLengkapCon.isValid && noHandphoneCon.isValid && alamatCon.isValid) {
       MahasService.loadingOverlay(true);
-      Map<String, dynamic> userModel = {
-        "nama": namaLengkapCon.value,
-        "no_hp": noHandphoneCon.value,
-        "alamat": alamatCon.value,
-        "company_id": idPerusahaanCon.value,
-      };
+      Map<String, dynamic> userModel = UserprofileModel.toJSon(
+        UserprofileModel.init(
+          nama: namaLengkapCon.value,
+          email: auth.currentUser!.email,
+          noHp: noHandphoneCon.value,
+          alamat: alamatCon.value,
+          companyId: idPerusahaanCon.value,
+        ),
+      );
       try {
-        await MahasConfig.firestore.collection("user").add(userModel);
+        await FireStoreQuery.tableUser.add(userModel);
         EasyLoading.dismiss();
         _toHome();
       } on FirebaseException catch (e) {
@@ -165,24 +181,35 @@ class RegisterController extends GetxController {
         namaPerusahaanCon.isValid &&
         alamatPerusahaanCon.isValid) {
       MahasService.loadingOverlay(true);
-      Map<String, dynamic> companyModel = {
-        "user_id": [auth.currentUser!.uid],
-        "nama_perusahaan": namaPerusahaanCon.value,
-        "alamat_perusahaan": alamatPerusahaanCon.value,
-      };
+      Map<String, dynamic> companyModel = CompanyModel.toJSon(
+        CompanyModel.init(
+          namaPerusahaan: namaPerusahaanCon.value,
+          alamatPerusahaan: checked.value
+              ? alamatCon.value
+              : alamatPerusahaanCon.value,
+          userId: [auth.currentUser!.uid],
+        ),
+      );
 
       try {
-        var data =
-            await MahasConfig.firestore.collection("company").add(companyModel);
-        Map<String, dynamic> userModel = {
-          "nama": namaLengkapCon.value,
-          "no_hp": noHandphoneCon.value,
-          "alamat": alamatCon.value,
-          "company_id": data.id,
-        };
-        await MahasConfig.firestore.collection("user").add(userModel);
+        var data = await FireStoreQuery.tableCompany.add(companyModel);
+        data.get();
+        Map<String, dynamic> userModel = UserprofileModel.toJSon(
+          UserprofileModel.init(
+            nama: namaLengkapCon.value,
+            email: auth.currentUser!.email,
+            noHp: int.parse(noHandphoneCon.value),
+            alamat: alamatCon.value,
+            companyId: data.id,
+          ),
+        );
+        await FireStoreQuery.tableUser.add(userModel);
+        await AuthController.getProfileandCompany(
+          email: auth.currentUser!.email.toString(),
+          afterSucces: _toHome,
+        );
         EasyLoading.dismiss();
-        _toHome();
+        
       } on FirebaseException catch (e) {
         EasyLoading.dismiss();
         Helper.errorToast(message: e.message);

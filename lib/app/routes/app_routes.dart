@@ -9,6 +9,8 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const SPLASH_SCREEN = _Paths.SPLASH_SCREEN;
   static const REGISTER = _Paths.REGISTER;
+  static const SETTING_PAGE = _Paths.SETTING_PAGE;
+  static const MASTER_UNIT_PRODUK = _Paths.MASTER_UNIT_PRODUK;
 }
 
 abstract class _Paths {
@@ -17,4 +19,6 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const SPLASH_SCREEN = '/splash-screen';
   static const REGISTER = '/register';
+  static const SETTING_PAGE = '/setting-page';
+  static const MASTER_UNIT_PRODUK = '/master-unit-produk';
 }
