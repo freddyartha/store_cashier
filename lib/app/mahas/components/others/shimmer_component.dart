@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:store_cashier/app/mahas/components/mahas_themes.dart';
 import 'package:store_cashier/app/mahas/mahas_widget.dart';
 
 import '../../mahas_colors.dart';
@@ -30,7 +31,7 @@ class ShimmerComponent extends StatelessWidget {
       shimmers.add(
         isCardList
             ? MahasWidget.uniformCardWidget(
-              margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                 child: const SizedBox(
                   height: 60,
                   width: double.infinity,
@@ -41,11 +42,15 @@ class ShimmerComponent extends StatelessWidget {
                   right: marginRight,
                   left: marginLeft,
                   top: marginTop,
-                  bottom: i == count ? marginBottom : 8,
+                  bottom: i == count ? marginBottom : 5,
                 ),
                 width: double.infinity,
-                height: 16,
-                color: MahasColors.light,
+                height: 25,
+                decoration: BoxDecoration(
+                  color: MahasColors.light,
+                  borderRadius:
+                      BorderRadius.circular(MahasThemes.borderRadius / 2),
+                ),
               ),
       );
     }

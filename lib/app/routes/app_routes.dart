@@ -11,6 +11,7 @@ abstract class Routes {
   static const REGISTER = _Paths.REGISTER;
   static const SETTING_PAGE = _Paths.SETTING_PAGE;
   static const MASTER_UNIT_PRODUK = _Paths.MASTER_UNIT_PRODUK;
+  static const MASTER_UNIT_PRODUK_SETUP = _Paths.MASTER_UNIT_PRODUK_SETUP;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const REGISTER = '/register';
   static const SETTING_PAGE = '/setting-page';
   static const MASTER_UNIT_PRODUK = '/master-unit-produk';
+  static const MASTER_UNIT_PRODUK_SETUP = '/master-unit-produk-setup';
 }

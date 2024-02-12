@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:store_cashier/app/mahas/mahas_font_size.dart';
 import 'package:uuid/uuid.dart';
 
 import '../components/buttons/button_component.dart';
@@ -91,6 +92,8 @@ class Helper {
   static Future<bool?> dialogQuestion({
     String? message,
     IconData? icon,
+    bool isWithImageAsset = true,
+    String? imageAsset,
     String? textConfirm,
     String? textCancel,
     Color? color,
@@ -98,17 +101,24 @@ class Helper {
     return await Get.dialog<bool?>(
       AlertDialog(
         shape: const RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.all(Radius.circular(MahasThemes.borderRadius))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(MahasThemes.borderRadius),
+          ),
+        ),
         backgroundColor: Colors.white,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon ?? FontAwesomeIcons.question,
-              color: color ?? MahasColors.primary,
-              size: 40,
-            ),
+            isWithImageAsset
+                ? Image.asset(
+                    imageAsset ?? "assets/images/question_confirmation.png",
+                    width: 40,
+                  )
+                : Icon(
+                    icon ?? FontAwesomeIcons.question,
+                    color: color ?? MahasColors.primary,
+                    size: 40,
+                  ),
             const Padding(padding: EdgeInsets.all(10)),
             Text(
               message ?? "",
@@ -119,7 +129,7 @@ class Helper {
         contentPadding:
             const EdgeInsets.only(bottom: 0, top: 20, right: 20, left: 20),
         actionsPadding:
-            const EdgeInsets.only(top: 10, bottom: 5, left: 20, right: 20),
+            const EdgeInsets.only(top: 10, bottom: 20, left: 20, right: 20),
         actions: [
           const Divider(color: MahasColors.lightBorderColor),
           MahasWidget.horizontalTwoButtonWidget(
@@ -304,10 +314,21 @@ class Helper {
     );
   }
 
-  static void errorToast({String? message}) {
-    Get.snackbar(
-      "Terjadi Kesalahan",
-      message ?? 'Pastikan internetmu lancar, cek ulang jaringan di tempatmu',
+  static errorToast({String? message}) {
+    return Get.snackbar(
+      "",
+      "",
+      titleText: const TextComponent(
+        value: "Terjadi Kesalahan",
+        fontSize: MahasFontSize.h6,
+        fontWeight: FontWeight.bold,
+        fontColor: MahasColors.light,
+      ),
+      messageText: TextComponent(
+        value: message ??
+            'Pastikan internetmu lancar, cek ulang jaringan di tempatmu',
+        fontColor: MahasColors.light,
+      ),
       snackPosition: SnackPosition.BOTTOM,
       duration: const Duration(seconds: 5),
       backgroundColor: MahasColors.danger,
