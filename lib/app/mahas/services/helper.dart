@@ -112,28 +112,28 @@ class Helper {
             isWithImageAsset
                 ? Image.asset(
                     imageAsset ?? "assets/images/question_confirmation.png",
-                    width: 40,
+                    height: 150,
                   )
                 : Icon(
                     icon ?? FontAwesomeIcons.question,
                     color: color ?? MahasColors.primary,
                     size: 40,
                   ),
-            const Padding(padding: EdgeInsets.all(10)),
-            Text(
-              message ?? "",
+            // const Padding(padding: EdgeInsets.all(5)),
+            TextComponent(
+              value: message ?? "",
               textAlign: TextAlign.center,
+              fontSize: MahasFontSize.h6,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
-        contentPadding:
-            const EdgeInsets.only(bottom: 0, top: 20, right: 20, left: 20),
-        actionsPadding:
-            const EdgeInsets.only(top: 10, bottom: 20, left: 20, right: 20),
+        contentPadding: const EdgeInsets.only(top: 10, right: 10, left: 10),
+        actionsPadding: const EdgeInsets.all(10),
         actions: [
           const Divider(color: MahasColors.lightBorderColor),
           MahasWidget.horizontalTwoButtonWidget(
-            leftButtonText: textCancel ?? "Close",
+            leftButtonText: textCancel ?? "Batal",
             rightButtonText: textConfirm ?? "OK",
             leftButtonOnTap: () {
               Get.back(result: false);
@@ -446,7 +446,7 @@ class Helper {
     dynamic parametes,
   }) async {
     if (questionBack && editable) {
-      final r = await Helper.dialogConfirmation(
+      final r = await Helper.dialogQuestion(
         message: 'Anda yakin ingin kembali ?',
         textConfirm: 'Ya',
       );

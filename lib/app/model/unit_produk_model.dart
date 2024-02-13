@@ -2,10 +2,10 @@ import 'dart:convert';
 
 class UnitprodukModel {
   String? unit;
+  String? unitLowerCase;
   String? keterangan;
 
   UnitprodukModel();
-  UnitprodukModel.init(this.unit, this.keterangan);
 
   static UnitprodukModel fromJson(String jsonString) {
     final data = json.decode(jsonString);
@@ -16,6 +16,7 @@ class UnitprodukModel {
     final model = UnitprodukModel();
 
     model.unit = dynamicData['unit'];
+    model.unitLowerCase = dynamicData['unitLowerCase'];
     model.keterangan = dynamicData['keterangan'];
 
     return model;
@@ -24,6 +25,7 @@ class UnitprodukModel {
   static Map<String, dynamic> toJSon(UnitprodukModel data) {
     var mapData = {
       'unit': data.unit,
+      'unitLowerCase': data.unitLowerCase,
       'keterangan': data.keterangan,
     };
     return mapData;

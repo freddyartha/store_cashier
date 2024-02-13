@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:store_cashier/app/firestore_query/reusable_firestore_query.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
@@ -11,18 +9,17 @@ class MasterUnitProdukSetupController extends GetxController {
   final unitKeteranganCon = InputTextController(type: InputTextType.paragraf);
 
   late SetupPageController formCon;
-  String? id;
 
   @override
   void onInit() {
-    id = Get.parameters["id"];
     formCon = SetupPageController(
-      urlApiGet: FireStoreQuery.unitProdukList.doc(id),
+      urlApiGet: FireStoreQuery.unitProdukList,
       urlApiPost: FireStoreQuery.unitProdukList,
-      urlApiPut: FireStoreQuery.unitProdukList.doc(id),
-      urlApiDelete: FireStoreQuery.unitProdukList.doc(id),
+      urlApiPut: FireStoreQuery.unitProdukList,
+      urlApiDelete: FireStoreQuery.unitProdukList,
       bodyApi: (id) => {
         "unit": kodeUnitCon.value,
+        "unitLowerCase": kodeUnitCon.value.toString().toLowerCase(),
         "keterangan": unitKeteranganCon.value,
       },
       apiToView: (json) {
@@ -31,7 +28,6 @@ class MasterUnitProdukSetupController extends GetxController {
         unitKeteranganCon.value = model.keterangan;
       },
       itemKey: (e) => e['id'],
-      itemIdAfterSubmit: (e) => json.decode(e)['id'],
     );
     super.onInit();
   }

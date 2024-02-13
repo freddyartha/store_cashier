@@ -20,19 +20,18 @@ enum SetupPageState {
 }
 
 class SetupPageController<T> extends ChangeNotifier {
-  final DocumentReference<T>? urlApiGet;
+  final CollectionReference<T>? urlApiGet;
   final CollectionReference<T>? urlApiPost;
-  final DocumentReference<T>? urlApiPut;
-  final DocumentReference<T>? urlApiDelete;
+  final CollectionReference<T>? urlApiPut;
+  final CollectionReference<T>? urlApiDelete;
   final dynamic Function(dynamic e) itemKey;
-  final dynamic Function(dynamic e) itemIdAfterSubmit;
   late Function(VoidCallback fn) setState;
 
   final bool useThisBackAction;
   final bool withQuestionBack;
   bool allowDelete;
   bool allowEdit;
-  bool autoBack;
+
   String contentType;
   final bool isFormData;
   final dynamic pageBackParametes;
@@ -61,11 +60,9 @@ class SetupPageController<T> extends ChangeNotifier {
     required this.itemKey,
     this.allowDelete = true,
     this.allowEdit = true,
-    this.autoBack = false,
     this.contentType = "application/json",
     this.withQuestionBack = true,
     this.pageBackParametes,
-    required this.itemIdAfterSubmit,
     this.onBeforeSubmit,
     this.bodyApi,
     this.isFormData = false,
@@ -107,7 +104,7 @@ class SetupPageController<T> extends ChangeNotifier {
   Future _getModelFromApi(dynamic idX) async {
     if (urlApiGet != null) {
       try {
-        final r = await urlApiGet!.get();
+        final r = await urlApiGet!.doc(idX).get();
         if (r.exists) {
           _id = idX;
           setState(() {
@@ -165,7 +162,7 @@ class SetupPageController<T> extends ChangeNotifier {
       if (r == true) {
         await MahasService.loadingOverlay(false);
         try {
-          await urlApiDelete!.delete();
+          await urlApiDelete!.doc(_id).delete();
           await EasyLoading.dismiss();
 
           _backRefresh = true;
@@ -203,12 +200,13 @@ class SetupPageController<T> extends ChangeNotifier {
           editable = false;
         });
         try {
+          DocumentReference? post;
           _id == null
-              ? await urlApiPost!.add(model)
-              : await urlApiPut!.set(model);
+              ? post = await urlApiPost!.add(model)
+              : await urlApiPut!.doc(_id).update(model);
           editable = false;
           _backRefresh = true;
-          if (!autoBack) await _getModelFromApi(_id);
+          await _getModelFromApi(_id ?? post!.id);
         } on FirebaseException catch (e) {
           setState(() {
             editable = true;
@@ -434,7 +432,7 @@ class _SetupPageComponentState extends State<SetupPageComponent> {
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                             vertical:
-                                                widget.childrenPadding ? 20 : 0,
+                                                widget.childrenPadding ? 10 : 0,
                                             horizontal:
                                                 widget.childrenPadding ? 10 : 0,
                                           ),
