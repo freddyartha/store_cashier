@@ -10,12 +10,16 @@ class EmptyComponent extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isCard;
   final Color textColor;
+  final bool isGeneralError;
+  final String message;
 
   const EmptyComponent({
     super.key,
     this.onPressed,
     this.isCard = false,
     this.textColor = MahasColors.dark,
+    this.isGeneralError = false,
+    this.message = "Data Tidak Ditemukan",
   });
 
   @override
@@ -34,6 +38,8 @@ class EmptyComponent extends StatelessWidget {
           : EmptyWidget(
               onPressed: onPressed,
               textColor: textColor,
+              isGeneralError: isGeneralError,
+              message: message,
             ),
     );
   }
@@ -44,10 +50,14 @@ class EmptyWidget extends StatelessWidget {
     super.key,
     required this.onPressed,
     this.textColor = MahasColors.dark,
+    this.isGeneralError = false,
+    this.message = "Data Tidak Ditemukan",
   });
 
   final VoidCallback? onPressed;
   final Color textColor;
+  final bool isGeneralError;
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +68,16 @@ class EmptyWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            "assets/images/not_found.png",
+            isGeneralError
+                ? "assets/images/general_error.png"
+                : "assets/images/not_found.png",
             width: MediaQuery.of(context).orientation == Orientation.portrait
                 ? MediaQuery.of(context).size.width * 0.6
                 : MediaQuery.of(context).size.width * 0.3,
           ),
           TextComponent(
             margin: const EdgeInsets.only(top: 30),
-            value: "Data Tidak Ditemukan",
+            value: message,
             fontSize: MahasFontSize.h5,
             fontWeight: FontWeight.bold,
             textAlign: TextAlign.center,

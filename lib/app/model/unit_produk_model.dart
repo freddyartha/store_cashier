@@ -1,9 +1,13 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UnitprodukModel {
   String? unit;
   String? unitLowerCase;
   String? keterangan;
+  Timestamp? createdAt;
+  Timestamp? updatedAt;
 
   UnitprodukModel();
 
@@ -18,6 +22,7 @@ class UnitprodukModel {
     model.unit = dynamicData['unit'];
     model.unitLowerCase = dynamicData['unitLowerCase'];
     model.keterangan = dynamicData['keterangan'];
+    model.createdAt = dynamicData['createdAt'];
 
     return model;
   }
@@ -27,6 +32,8 @@ class UnitprodukModel {
       'unit': data.unit,
       'unitLowerCase': data.unitLowerCase,
       'keterangan': data.keterangan,
+      'createdAt': data.createdAt,
+      'updatedAt': data.updatedAt,
     };
     return mapData;
   }

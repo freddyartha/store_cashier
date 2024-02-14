@@ -1,150 +1,47 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:store_cashier/app/mahas/mahas_widget.dart';
 import '../../mahas_colors.dart';
-import '../../mahas_config.dart';
-import '../../models/api_list_resut_model.dart';
-import '../../services/helper.dart';
-import '../../services/http_api.dart';
 import '../inputs/input_text_component.dart';
 import 'empty_component.dart';
 import 'shimmer_component.dart';
 
 class ListComponentController<T> {
-  final Function(int index, String filter) urlApi;
-  final T Function(dynamic e) fromDynamic;
+  final Function()? addOnTap;
   final bool allowSearch;
-  final bool autoRefresh;
+  final bool isWithAddTap;
   late Function(VoidCallback fn) setState;
-
-  final _listViewController = ScrollController();
-  final _filterController = InputTextController();
-  final List<T> _items = [];
+  Query<T> query;
 
   ListComponentController({
-    required this.urlApi,
-    required this.fromDynamic,
+    required this.query,
     this.allowSearch = true,
-    this.autoRefresh = true,
+    this.addOnTap,
+    this.isWithAddTap = true,
   });
-
-  bool _loadingBottom = false;
-  bool _isItemRefresh = true;
-  int _pageIndex = 0;
-  int _maxPage = 0;
-
-  void clear() {
-    _items.clear();
-    _pageIndex = 0;
-    _maxPage = 0;
-  }
-
-  Future refresh() async {
-    clear();
-    await _refreshBottom();
-    Get.focusScope?.unfocus();
-    setState(() {});
-  }
-
-  void clearSearch(){
-    _filterController.value = "";
-  }
-
-  Future _refreshBottom({nextPage = false}) async {
-    final itemsX = await _getItems(nextPage: nextPage);
-    if (itemsX != null) {
-      _items.addAll(itemsX);
-    }
-  }
-
-  Future<List<T>?> _getItems({nextPage = false}) async {
-    if (!nextPage) {
-      setState(() {
-        _isItemRefresh = true;
-      });
-    }
-    try {
-      final pageIndexX = nextPage ? _pageIndex + 1 : _pageIndex;
-      final filterX = _filterController.value;
-      final query =
-          urlApi(pageIndexX + (MahasConfig.isLaravelBackend ? 1 : 0), filterX);
-      final apiModel = await HttpApi.get(
-        query
-      );
-      final List<T> result = [];
-      setState(() {
-        _isItemRefresh = false;
-      });
-      if (apiModel.success) {
-        ApiResultListModel listModel =
-            ApiResultListModel.fromJson(apiModel.body);
-        _maxPage = listModel.maxPage!;
-        _pageIndex = pageIndexX;
-        for (var obj in (listModel.datas ?? [])) {
-          result.add(fromDynamic(obj));
-        }
-      } else {
-        Helper.dialogWarning(apiModel.message ?? "");
-      }
-      return result;
-    } catch (ex) {
-      Helper.dialogWarning('$ex');
-      setState(() {
-        _isItemRefresh = false;
-      });
-      return null;
-    }
-  }
 
   void init(Function(VoidCallback fn) setStateX) {
     setState = setStateX;
-    _filterController.onEditingComplete = () => refresh();
-    _listViewController.addListener(() async {
-      if (_loadingBottom) return;
-      final maxScroll = _listViewController.position.maxScrollExtent;
-      final currentScroll = _listViewController.position.pixels;
-      const delta = 0.0;
-      if (maxScroll - currentScroll <= delta && _pageIndex != _maxPage) {
-        _loadingBottom = true;
-        await _refreshBottom(nextPage: true);
-        _loadingBottom = false;
-      }
-    });
-    if (autoRefresh) {
-      refresh();
-    }
   }
 }
 
 class ListComponent<T> extends StatefulWidget {
   final ListComponentController<T> controller;
-  final Widget Function(T e) itemBuilder;
-  final bool allowMenuAction;
-  final List<Widget>? listMenuAction;
-  final Widget Function(BuildContext context, int index, int length)?
-      separatorBuilder;
+  final Widget Function(QueryDocumentSnapshot<T>) itemBuilder;
   final bool emptyIsCard;
   final bool isCustomLoadingWidget;
   final Widget customLoadingWidget;
-  final double spaceFromHeader;
-  final String searchPlaceHolder;
-  final bool isCardSearchWithIcon;
-  final IconData searchIcon;
+  final InputTextComponent? searchTextComponent;
 
   const ListComponent({
     super.key,
     required this.controller,
     required this.itemBuilder,
-    this.allowMenuAction = false,
-    this.listMenuAction,
-    this.separatorBuilder,
     this.emptyIsCard = false,
     this.isCustomLoadingWidget = false,
     this.customLoadingWidget = const ShimmerComponent(),
-    this.spaceFromHeader = 0,
-    this.searchPlaceHolder = "Search",
-    this.isCardSearchWithIcon = false,
-    this.searchIcon = Icons.search_rounded,
+    this.searchTextComponent,
   });
 
   @override
@@ -164,87 +61,69 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Visibility(
-          visible: widget.controller.allowSearch,
-          child: widget.isCardSearchWithIcon
-              ? MahasWidget.uniformCardWidget(
-                  child: Row(
-                    children: [
-                      Icon(
-                        widget.searchIcon,
-                        size: 25,
-                        color: MahasColors.greyFontColor,
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: InputTextComponent(
-                            edgeInsets: const EdgeInsets.only(left: 5),
-                            borderRadius: Radius.zero,
-                            placeHolder: widget.searchPlaceHolder,
-                            fillColor: MahasColors.light,
-                            marginBottom: 0,
-                            controller: widget.controller._filterController,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : InputTextComponent(
-                  borderRadius: Radius.zero,
-                  placeHolder: widget.searchPlaceHolder,
-                  fillColor: MahasColors.light,
-                  marginBottom: 0,
-                  controller: widget.controller._filterController,
+        MahasWidget.backgroundWidget(),
+        Column(
+          children: [
+            Visibility(
+              visible: widget.controller.allowSearch,
+              child: MahasWidget.uniformCardWidget(
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.search_rounded,
+                      size: 25,
+                      color: MahasColors.greyFontColor,
+                    ),
+                    Expanded(
+                      child: Center(child: widget.searchTextComponent),
+                    ),
+                  ],
                 ),
+              ),
+            ),
+            Expanded(
+              child: FirestoreListView<T>(
+                query: widget.controller.query,
+                emptyBuilder: (context) => const EmptyComponent(),
+                loadingBuilder: (context) => const Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: ShimmerComponent(),
+                ),
+                errorBuilder: (context, error, stackTrace) => EmptyComponent(
+                  isGeneralError: true,
+                  message: error.toString(),
+                ),
+                itemBuilder: (context, doc) {
+                  return widget.itemBuilder(doc);
+                },
+              ),
+            ),
+          ],
         ),
-        SizedBox(
-          height: widget.spaceFromHeader,
-        ),
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: widget.controller.refresh,
-            child: widget.controller._isItemRefresh
-                ? widget.isCustomLoadingWidget
-                    ? widget.customLoadingWidget
-                    : const ShimmerComponent()
-                : widget.controller._items.isEmpty &&
-                        !widget.controller._isItemRefresh
-                    ? EmptyComponent(
-                        onPressed: widget.controller.refresh,
-                        isCard: widget.emptyIsCard,
-                        textColor: MahasColors.light,
-                      )
-                    : ListView.separated(
-                        separatorBuilder: widget.separatorBuilder != null
-                            ? (context, index) => widget.separatorBuilder!(
-                                context, index, widget.controller._items.length)
-                            : (context, index) => const Divider(height: 0),
-                        controller: widget.controller._listViewController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: widget.controller._items.length +
-                            (MahasConfig.isLaravelBackend ? 1 : 0),
-                        itemBuilder: (context, index) {
-                          if (index == widget.controller._items.length) {
-                            return Visibility(
-                              visible: widget.controller._pageIndex !=
-                                      widget.controller._maxPage &&
-                                  widget.controller._items.isNotEmpty,
-                              child: Container(
-                                margin: const EdgeInsets.all(10),
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                            );
-                          } else {
-                            return widget
-                                .itemBuilder(widget.controller._items[index]);
-                          }
-                        },
-                      ),
+        Visibility(
+          visible: widget.controller.isWithAddTap,
+          child: Column(
+            children: [
+              const Expanded(child: SizedBox()),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton(
+                  onPressed: widget.controller.addOnTap,
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: MahasColors.light,
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    size: 40,
+                    color: MahasColors.primary,
+                  ),
+                ),
+              )
+            ],
           ),
         )
       ],

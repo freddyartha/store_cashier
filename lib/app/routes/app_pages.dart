@@ -4,6 +4,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/master_data_produk/bindings/master_data_produk_binding.dart';
+import '../modules/master_data_produk/views/master_data_produk_view.dart';
 import '../modules/master_unit_produk/bindings/master_unit_produk_binding.dart';
 import '../modules/master_unit_produk/views/master_unit_produk_view.dart';
 import '../modules/master_unit_produk_setup/bindings/master_unit_produk_setup_binding.dart';
@@ -59,6 +61,11 @@ class AppPages {
       name: _Paths.MASTER_UNIT_PRODUK_SETUP,
       page: () => const MasterUnitProdukSetupView(),
       binding: MasterUnitProdukSetupBinding(),
+    ),
+    GetPage(
+      name: _Paths.MASTER_DATA_PRODUK,
+      page: () => const MasterDataProdukView(),
+      binding: MasterDataProdukBinding(),
     ),
   ];
 }

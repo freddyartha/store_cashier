@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:store_cashier/app/firestore_query/reusable_firestore_query.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
@@ -21,6 +22,8 @@ class MasterUnitProdukSetupController extends GetxController {
         "unit": kodeUnitCon.value,
         "unitLowerCase": kodeUnitCon.value.toString().toLowerCase(),
         "keterangan": unitKeteranganCon.value,
+        if (id == null) "createdAt": FieldValue.serverTimestamp(),
+        "updatedAt": FieldValue.serverTimestamp(),
       },
       apiToView: (json) {
         var model = UnitprodukModel.fromDynamic(json);

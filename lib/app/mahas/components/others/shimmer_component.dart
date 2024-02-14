@@ -15,7 +15,7 @@ class ShimmerComponent extends StatelessWidget {
 
   const ShimmerComponent({
     super.key,
-    this.count = 8,
+    this.count = 5,
     this.marginBottom = 0,
     this.marginLeft = 0,
     this.marginRight = 0,
@@ -56,7 +56,7 @@ class ShimmerComponent extends StatelessWidget {
     }
     return Shimmer.fromColors(
       baseColor: MahasColors.dark.withOpacity(.1),
-      highlightColor: MahasColors.dark.withOpacity(.05),
+      highlightColor: MahasColors.light.withOpacity(.05),
       child: SingleChildScrollView(
         child: Column(
           children: shimmers,

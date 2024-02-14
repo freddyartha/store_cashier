@@ -67,4 +67,8 @@ class HomeController extends GetxController {
   void unitOnTap() {
     Get.toNamed(Routes.MASTER_UNIT_PRODUK);
   }
+
+  void dataProdukOnTap() {
+    Get.toNamed(Routes.MASTER_DATA_PRODUK);
+  }
 }
