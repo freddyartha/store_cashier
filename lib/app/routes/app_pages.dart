@@ -6,6 +6,10 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/master_data_produk/bindings/master_data_produk_binding.dart';
 import '../modules/master_data_produk/views/master_data_produk_view.dart';
+import '../modules/master_kategori_produk/bindings/master_kategori_produk_binding.dart';
+import '../modules/master_kategori_produk/views/master_kategori_produk_view.dart';
+import '../modules/master_kategori_produk_setup/bindings/master_kategori_produk_setup_binding.dart';
+import '../modules/master_kategori_produk_setup/views/master_kategori_produk_setup_view.dart';
 import '../modules/master_unit_produk/bindings/master_unit_produk_binding.dart';
 import '../modules/master_unit_produk/views/master_unit_produk_view.dart';
 import '../modules/master_unit_produk_setup/bindings/master_unit_produk_setup_binding.dart';
@@ -66,6 +70,16 @@ class AppPages {
       name: _Paths.MASTER_DATA_PRODUK,
       page: () => const MasterDataProdukView(),
       binding: MasterDataProdukBinding(),
+    ),
+    GetPage(
+      name: _Paths.MASTER_KATEGORI_PRODUK,
+      page: () => const MasterKategoriProdukView(),
+      binding: MasterKategoriProdukBinding(),
+    ),
+    GetPage(
+      name: _Paths.MASTER_KATEGORI_PRODUK_SETUP,
+      page: () => const MasterKategoriProdukSetupView(),
+      binding: MasterKategoriProdukSetupBinding(),
     ),
   ];
 }

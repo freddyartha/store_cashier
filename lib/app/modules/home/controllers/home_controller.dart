@@ -58,6 +58,12 @@ class HomeController extends GetxController {
     );
     menus.add(
       MenuItemModel(
+          title: "Master Kategori Produk",
+          assetImage: "assets/images/logo.png",
+          onTab: kategoriProdukOnTap),
+    );
+    menus.add(
+      MenuItemModel(
           title: "Master Data Produk",
           assetImage: "assets/images/logo.png",
           onTab: unitOnTap),
@@ -70,5 +76,9 @@ class HomeController extends GetxController {
 
   void dataProdukOnTap() {
     Get.toNamed(Routes.MASTER_DATA_PRODUK);
+  }
+
+  void kategoriProdukOnTap() {
+    Get.toNamed(Routes.MASTER_KATEGORI_PRODUK);
   }
 }

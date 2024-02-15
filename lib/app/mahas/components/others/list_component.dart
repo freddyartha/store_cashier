@@ -109,17 +109,20 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
               const Expanded(child: SizedBox()),
               Align(
                 alignment: Alignment.bottomRight,
-                child: ElevatedButton(
-                  onPressed: widget.controller.addOnTap,
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(10),
-                    backgroundColor: MahasColors.light,
-                  ),
-                  child: Icon(
-                    Icons.add,
-                    size: 40,
-                    color: MahasColors.primary,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: ElevatedButton(
+                    onPressed: widget.controller.addOnTap,
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(8),
+                      backgroundColor: MahasColors.light,
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      size: 40,
+                      color: MahasColors.primary,
+                    ),
                   ),
                 ),
               )

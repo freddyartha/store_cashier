@@ -118,7 +118,7 @@ class HomeView extends GetView<HomeController> {
                               onTap: menu.onTab,
                               child: MahasWidget.uniformCardWidget(
                                 margin: const EdgeInsets.all(5),
-                                color: MahasColors.primary.withOpacity(0.7),
+                                color: MahasColors.primary,
                                 padding: const EdgeInsets.all(8),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,

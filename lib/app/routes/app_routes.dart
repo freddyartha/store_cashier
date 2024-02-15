@@ -13,6 +13,9 @@ abstract class Routes {
   static const MASTER_UNIT_PRODUK = _Paths.MASTER_UNIT_PRODUK;
   static const MASTER_UNIT_PRODUK_SETUP = _Paths.MASTER_UNIT_PRODUK_SETUP;
   static const MASTER_DATA_PRODUK = _Paths.MASTER_DATA_PRODUK;
+  static const MASTER_KATEGORI_PRODUK = _Paths.MASTER_KATEGORI_PRODUK;
+  static const MASTER_KATEGORI_PRODUK_SETUP =
+      _Paths.MASTER_KATEGORI_PRODUK_SETUP;
 }
 
 abstract class _Paths {
@@ -25,4 +28,6 @@ abstract class _Paths {
   static const MASTER_UNIT_PRODUK = '/master-unit-produk';
   static const MASTER_UNIT_PRODUK_SETUP = '/master-unit-produk-setup';
   static const MASTER_DATA_PRODUK = '/master-data-produk';
+  static const MASTER_KATEGORI_PRODUK = '/master-kategori-produk';
+  static const MASTER_KATEGORI_PRODUK_SETUP = '/master-kategori-produk-setup';
 }
