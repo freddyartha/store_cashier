@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:store_cashier/app/mahas/mahas_config.dart';
 import 'package:store_cashier/app/model/kategori_produk_model.dart';
+import 'package:store_cashier/app/model/supplier_model.dart';
 import 'package:store_cashier/app/model/unit_produk_model.dart';
 
 class FireStoreQuery {
@@ -20,6 +21,10 @@ class FireStoreQuery {
       .doc(MahasConfig.profileModel.companyId)
       .collection("kategori_produk");
 
+  static CollectionReference supplierList = tableCompany
+      .doc(MahasConfig.profileModel.companyId)
+      .collection("supplier");
+
   //default queries
   static Query<UnitprodukModel> unitProdukListDefaultQuery = unitProdukList
       .where("unit", isNull: false)
@@ -36,4 +41,10 @@ class FireStoreQuery {
                 KategoriprodukModel.fromDynamic(snapshot),
             toFirestore: (data, _) => KategoriprodukModel.toJSon(data),
           );
+  static Query<SupplierModel> supplierListDefaultQuery = supplierList
+      .where("namaSupplier", isNull: false)
+      .withConverter<SupplierModel>(
+        fromFirestore: (snapshot, _) => SupplierModel.fromDynamic(snapshot),
+        toFirestore: (data, _) => SupplierModel.toJSon(data),
+      );
 }

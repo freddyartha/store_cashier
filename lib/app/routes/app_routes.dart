@@ -16,6 +16,8 @@ abstract class Routes {
   static const MASTER_KATEGORI_PRODUK = _Paths.MASTER_KATEGORI_PRODUK;
   static const MASTER_KATEGORI_PRODUK_SETUP =
       _Paths.MASTER_KATEGORI_PRODUK_SETUP;
+  static const MASTER_SUPPLIER = _Paths.MASTER_SUPPLIER;
+  static const MASTER_SUPPLIER_SETUP = _Paths.MASTER_SUPPLIER_SETUP;
 }
 
 abstract class _Paths {
@@ -30,4 +32,6 @@ abstract class _Paths {
   static const MASTER_DATA_PRODUK = '/master-data-produk';
   static const MASTER_KATEGORI_PRODUK = '/master-kategori-produk';
   static const MASTER_KATEGORI_PRODUK_SETUP = '/master-kategori-produk-setup';
+  static const MASTER_SUPPLIER = '/master-supplier';
+  static const MASTER_SUPPLIER_SETUP = '/master-supplier-setup';
 }

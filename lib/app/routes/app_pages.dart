@@ -10,6 +10,10 @@ import '../modules/master_kategori_produk/bindings/master_kategori_produk_bindin
 import '../modules/master_kategori_produk/views/master_kategori_produk_view.dart';
 import '../modules/master_kategori_produk_setup/bindings/master_kategori_produk_setup_binding.dart';
 import '../modules/master_kategori_produk_setup/views/master_kategori_produk_setup_view.dart';
+import '../modules/master_supplier/bindings/master_supplier_binding.dart';
+import '../modules/master_supplier/views/master_supplier_view.dart';
+import '../modules/master_supplier_setup/bindings/master_supplier_setup_binding.dart';
+import '../modules/master_supplier_setup/views/master_supplier_setup_view.dart';
 import '../modules/master_unit_produk/bindings/master_unit_produk_binding.dart';
 import '../modules/master_unit_produk/views/master_unit_produk_view.dart';
 import '../modules/master_unit_produk_setup/bindings/master_unit_produk_setup_binding.dart';
@@ -80,6 +84,16 @@ class AppPages {
       name: _Paths.MASTER_KATEGORI_PRODUK_SETUP,
       page: () => const MasterKategoriProdukSetupView(),
       binding: MasterKategoriProdukSetupBinding(),
+    ),
+    GetPage(
+      name: _Paths.MASTER_SUPPLIER,
+      page: () => const MasterSupplierView(),
+      binding: MasterSupplierBinding(),
+    ),
+    GetPage(
+      name: _Paths.MASTER_SUPPLIER_SETUP,
+      page: () => const MasterSupplierSetupView(),
+      binding: MasterSupplierSetupBinding(),
     ),
   ];
 }
