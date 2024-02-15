@@ -345,7 +345,6 @@ class _SetupPageComponentState extends State<SetupPageComponent> {
             )
           : Scaffold(
               backgroundColor: Colors.transparent,
-              resizeToAvoidBottomInset: false,
               appBar: !widget.showAppBar
                   ? null
                   : MahasWidget.mahasAppBar(

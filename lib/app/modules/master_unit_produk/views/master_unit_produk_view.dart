@@ -17,6 +17,7 @@ class MasterUnitProdukView extends GetView<MasterUnitProdukController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: MahasWidget.mahasAppBar(title: "Master Unit Produk"),
         body: MahasWidget.safeAreaWidget(
           child: ListComponent<UnitprodukModel>(
