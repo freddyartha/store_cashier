@@ -11,7 +11,7 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    refreshData(withFirebase: false);
+    refreshData();
     super.onInit();
   }
 
@@ -21,7 +21,7 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  Future<void> refreshData({bool withFirebase = true}) async {
+  Future<void> refreshData() async {
     await MahasService.loadingOverlay(false);
     await greeting();
     await allowedFeatures();

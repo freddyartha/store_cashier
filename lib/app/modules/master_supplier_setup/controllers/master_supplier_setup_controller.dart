@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:store_cashier/app/firestore_query/reusable_firestore_query.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
 import 'package:store_cashier/app/mahas/components/pages/setup_page_component.dart';
+import 'package:store_cashier/app/mahas/mahas_service.dart';
 import 'package:store_cashier/app/model/supplier_model.dart';
 
 class MasterSupplierSetupController extends GetxController {
@@ -29,7 +30,9 @@ class MasterSupplierSetupController extends GetxController {
         "emailSupplier": emailSupplierCon.value,
         "alamatSupplier": alamatSupplierCon.value,
         if (id == null) "createdAt": FieldValue.serverTimestamp(),
+        if(id == null)"createdBy": auth.currentUser!.uid,
         "updatedAt": FieldValue.serverTimestamp(),
+        "updatedBy": auth.currentUser!.uid,
       },
       apiToView: (json) {
         var model = SupplierModel.fromDynamic(json);

@@ -6,7 +6,9 @@ class KategoriprodukModel {
   String? kategoriLowerCase;
   String? keterangan;
   Timestamp? createdAt;
+  String? createdBy;
   Timestamp? updatedAt;
+  String? updatedBy;
 
   KategoriprodukModel();
 
@@ -22,7 +24,9 @@ class KategoriprodukModel {
     model.kategoriLowerCase = dynamicData['kategoriLowerCase'];
     model.keterangan = dynamicData['keterangan'];
     model.createdAt = dynamicData['createdAt'];
+    model.createdBy = dynamicData['createdBy'];
     model.updatedAt = dynamicData['updatedAt'];
+    model.updatedBy = dynamicData['updatedBy'];
 
     return model;
   }
@@ -33,7 +37,9 @@ class KategoriprodukModel {
       'kategoriLowerCase': data.kategoriLowerCase,
       'keterangan': data.keterangan,
       'createdAt': data.createdAt,
+      'createdBy': data.createdBy,
       'updatedAt': data.updatedAt,
+      'updatedBy': data.updatedBy,
     };
     return mapData;
   }

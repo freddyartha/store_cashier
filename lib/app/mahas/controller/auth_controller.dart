@@ -19,7 +19,9 @@ import 'package:store_cashier/app/model/user_profile_model.dart';
 import '../../routes/app_pages.dart';
 
 class AuthController extends GetxController {
-  static AuthController instance = Get.find();
+  static AuthController instance = Get.isRegistered<AuthController>()
+      ? Get.find<AuthController>()
+      : Get.put(AuthController());
   final box = GetStorage();
   late Rx<User?> firebaseUser;
 

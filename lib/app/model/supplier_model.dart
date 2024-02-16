@@ -10,7 +10,9 @@ class SupplierModel {
   String? emailsupplier;
   String? alamatsupplier;
   Timestamp? createdAt;
+  String? createdBy;
   Timestamp? updatedAt;
+  String? updatedBy;
 
   SupplierModel();
   static SupplierModel fromJson(String jsonString) {
@@ -28,7 +30,9 @@ class SupplierModel {
     model.emailsupplier = dynamicData['emailSupplier'];
     model.alamatsupplier = dynamicData['alamatSupplier'];
     model.createdAt = dynamicData['createdAt'];
+    model.createdBy = dynamicData['createdBy'];
     model.updatedAt = dynamicData['updatedAt'];
+    model.updatedBy = dynamicData['updatedBy'];
 
     return model;
   }
@@ -42,7 +46,9 @@ class SupplierModel {
       'emailSupplier': data.emailsupplier,
       'alamatSupplier': data.alamatsupplier,
       'createdAt': data.createdAt,
+      'createdBy': data.createdBy,
       'updatedAt': data.updatedAt,
+      'updatedBy': data.updatedBy,
     };
     return mapData;
   }

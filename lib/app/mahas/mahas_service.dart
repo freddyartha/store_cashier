@@ -22,6 +22,7 @@ import 'controller/auth_controller.dart';
 final remoteConfig = FirebaseRemoteConfig.instance;
 final auth = FirebaseAuth.instance;
 final authController = AuthController.instance;
+
 final splashController = SplashScreenController.instance;
 
 class MahasService {

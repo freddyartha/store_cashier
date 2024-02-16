@@ -1,19 +1,18 @@
 import 'package:get/get.dart';
-import 'package:store_cashier/app/mahas/controller/auth_controller.dart';
+import 'package:store_cashier/app/mahas/mahas_service.dart';
 
 import '../../../mahas/components/inputs/input_text_component.dart';
 
 class LoginController extends GetxController {
-  var authCon = AuthController.instance;
   InputTextController emailCon = InputTextController(type: InputTextType.email);
   InputTextController passwordCon =
       InputTextController(type: InputTextType.password);
 
   void appleLoginOnPress() async {
-    await authCon.signInWithApple();
+    await authController.signInWithApple();
   }
 
   void googleLoginOnPress() async {
-    await authCon.signInWithGoogle();
+    await authController.signInWithGoogle();
   }
 }

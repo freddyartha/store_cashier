@@ -7,7 +7,9 @@ class UnitprodukModel {
   String? unitLowerCase;
   String? keterangan;
   Timestamp? createdAt;
+  String? createdBy;
   Timestamp? updatedAt;
+  String? updatedBy;
 
   UnitprodukModel();
 
@@ -23,6 +25,9 @@ class UnitprodukModel {
     model.unitLowerCase = dynamicData['unitLowerCase'];
     model.keterangan = dynamicData['keterangan'];
     model.createdAt = dynamicData['createdAt'];
+    model.createdBy = dynamicData['createdBy'];
+    model.updatedAt = dynamicData['updatedAt'];
+    model.updatedBy = dynamicData['updatedBy'];
 
     return model;
   }
@@ -33,7 +38,9 @@ class UnitprodukModel {
       'unitLowerCase': data.unitLowerCase,
       'keterangan': data.keterangan,
       'createdAt': data.createdAt,
+      'createdBy': data.createdBy,
       'updatedAt': data.updatedAt,
+      'updatedBy': data.updatedBy,
     };
     return mapData;
   }

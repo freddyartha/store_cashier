@@ -39,7 +39,7 @@ class RegisterController extends GetxController {
 
   @override
   void onInit() {
-    alamatIsSame.onChanged = (value){
+    alamatIsSame.onChanged = (value) {
       checked.value = value;
     };
     super.onInit();
@@ -184,10 +184,13 @@ class RegisterController extends GetxController {
       Map<String, dynamic> companyModel = CompanyModel.toJSon(
         CompanyModel.init(
           namaPerusahaan: namaPerusahaanCon.value,
-          alamatPerusahaan: checked.value
-              ? alamatCon.value
-              : alamatPerusahaanCon.value,
+          alamatPerusahaan:
+              checked.value ? alamatCon.value : alamatPerusahaanCon.value,
           userId: [auth.currentUser!.uid],
+          createdAt: Timestamp.now(),
+          createdBy: auth.currentUser!.uid,
+          updatedAt: Timestamp.now(),
+          updatedBy: auth.currentUser!.uid,
         ),
       );
 
@@ -209,7 +212,6 @@ class RegisterController extends GetxController {
           afterSucces: _toHome,
         );
         EasyLoading.dismiss();
-        
       } on FirebaseException catch (e) {
         EasyLoading.dismiss();
         Helper.errorToast(message: e.message);
