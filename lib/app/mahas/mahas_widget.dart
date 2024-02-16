@@ -219,7 +219,6 @@ class MahasWidget {
               btnColor: MahasColors.light,
               textColor: MahasColors.primary,
               borderRadius: MahasThemes.borderRadius / 2,
-              fontSize: MahasFontSize.h6,
               fontWeight: FontWeight.w600,
               onTap: leftButtonOnTap,
             ),
@@ -229,7 +228,6 @@ class MahasWidget {
             child: ButtonComponent(
               text: rightButtonText,
               isMultilineText: false,
-              fontSize: MahasFontSize.h6,
               fontWeight: FontWeight.w600,
               btnColor: MahasColors.primary,
               borderRadius: MahasThemes.borderRadius / 2,

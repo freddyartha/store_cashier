@@ -66,7 +66,7 @@ class HomeController extends GetxController {
       MenuItemModel(
           title: "Master Data Produk",
           assetImage: "assets/images/logo.png",
-          onTab: unitOnTap),
+          onTab: dataProdukOnTap),
     );
     menus.add(
       MenuItemModel(

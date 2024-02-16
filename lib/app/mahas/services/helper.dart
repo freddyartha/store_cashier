@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -123,7 +124,6 @@ class Helper {
             TextComponent(
               value: message ?? "",
               textAlign: TextAlign.center,
-              fontSize: MahasFontSize.h6,
               fontWeight: FontWeight.w500,
             ),
           ],
@@ -315,6 +315,7 @@ class Helper {
   }
 
   static errorToast({String? message}) {
+    if (EasyLoading.isShow) EasyLoading.dismiss();
     return Get.snackbar(
       "",
       "",

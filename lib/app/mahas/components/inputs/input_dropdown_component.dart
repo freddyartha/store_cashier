@@ -110,7 +110,7 @@ class InputDropdownComponent extends StatefulWidget {
   final bool required;
   final bool editable;
   final InputDropdownController controller;
-  final Radius? borderRadius;
+  final double? borderRadius;
   final bool hasBorder;
   final EdgeInsetsGeometry? padding;
 
@@ -156,24 +156,27 @@ class _InputDropdownComponentState extends State<InputDropdownComponent> {
       contentPadding:
           widget.padding ?? const EdgeInsets.fromLTRB(10, 12, 10, 12),
       border: OutlineInputBorder(
-        borderRadius:
-            BorderRadius.all(widget.borderRadius ?? const Radius.circular(4)),
+        borderRadius: BorderRadius.all(
+          Radius.circular(widget.borderRadius ?? 4),
+        ),
         borderSide: widget.hasBorder
             ? BorderSide(
                 color: MahasColors.dark.withOpacity(widget.editable ? .1 : .3))
             : BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius:
-            BorderRadius.all(widget.borderRadius ?? const Radius.circular(4)),
+        borderRadius: BorderRadius.all(
+          Radius.circular(widget.borderRadius ?? 4),
+        ),
         borderSide: widget.hasBorder
             ? BorderSide(
                 color: MahasColors.dark.withOpacity(widget.editable ? .1 : .3))
             : BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius:
-            BorderRadius.all(widget.borderRadius ?? const Radius.circular(4)),
+        borderRadius: BorderRadius.all(
+          Radius.circular(widget.borderRadius ?? 4),
+        ),
         borderSide: widget.hasBorder
             ? BorderSide(
                 color: MahasColors.dark.withOpacity(widget.editable ? .1 : .3))
@@ -202,7 +205,9 @@ class _InputDropdownComponentState extends State<InputDropdownComponent> {
           color: MahasColors.dark.withOpacity(widget.editable ? .5 : .7),
         ),
       ),
-      style: TextStyle(color: MahasColors.dark.withOpacity(.7), fontSize: MahasFontSize.normal),
+      style: TextStyle(
+          color: MahasColors.dark.withOpacity(.7),
+          fontSize: MahasFontSize.normal),
       items: widget.controller.items
           .map((e) => DropdownMenuItem(
                 value: e,
@@ -215,6 +220,7 @@ class _InputDropdownComponentState extends State<InputDropdownComponent> {
       label: widget.label,
       isRequired: widget.required,
       marginBottom: widget.marginBottom,
+      borderRadius: widget.borderRadius ?? 4,
       childText: widget.controller._value?.text ?? "",
       children: widget.editable
           ? widget.required

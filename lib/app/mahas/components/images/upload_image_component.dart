@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,7 +55,7 @@ class _UploadImageComponentState extends State<UploadImageComponent> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        widget.imagePath == null
+        widget.imagePath == null || widget.imagePath == ""
             ? framePickImage()
             : imageDoc(widget.imagePath!),
         Row(
@@ -72,15 +74,22 @@ class _UploadImageComponentState extends State<UploadImageComponent> {
           ],
         ),
         Visibility(
-            visible: widget.imagePath != null,
+            visible: widget.imagePath != null && widget.imagePath != "",
             child: InkWell(
               onTap: () {
                 showEditSheet(widget.imagePath!, widget.photoType);
               },
-              child: const Text(
-                "Ganti Foto",
-                style: TextStyle(
-                    color: Colors.blue, decoration: TextDecoration.underline),
+              child: const SizedBox(
+                height: 50,
+                child: Center(
+                  child: Text(
+                    "Ganti Foto",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
               ),
             ))
       ],
@@ -115,13 +124,15 @@ class _UploadImageComponentState extends State<UploadImageComponent> {
                       GestureDetector(
                         onTap: () async {
                           Navigator.of(context).pop();
-                          widget.photoType == PhotoType.familyCard
+                          widget.photoType == PhotoType.familyCard ||
+                                  widget.photoType == PhotoType.gambar
                               ? _settingModalBottomSheet(context)
                               : showBotSheet(widget.photoType);
                         },
-                        child:  Column(
+                        child: Column(
                           children: <Widget>[
-                            Icon(Icons.edit, size: 30, color: MahasColors.primary),
+                            Icon(Icons.edit,
+                                size: 30, color: MahasColors.primary),
                             const SizedBox(
                               height: 5,
                             ),
@@ -191,18 +202,19 @@ class _UploadImageComponentState extends State<UploadImageComponent> {
             );
           },
           child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              child: FadeInImage.assetNetwork(
-                placeholder: "assets/gif/loading_lands.gif",
-                image: image,
-                height: widget.width == null
-                    ? Get.width / 4.5
-                    : Get.width / widget.width!,
-                width: widget.height == null
-                    ? Get.width / 3
-                    : Get.width / widget.height!,
-                fit: BoxFit.cover,
-              )),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            child: FadeInImage(
+              placeholder: const AssetImage("assets/images/loading_lands.gif"),
+              image: Image.file(File(image)).image,
+              height: widget.width == null
+                  ? Get.width / 4.5
+                  : Get.width / widget.width!,
+              width: widget.height == null
+                  ? Get.width / 3
+                  : Get.width / widget.height!,
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
       ),
     );
@@ -211,7 +223,8 @@ class _UploadImageComponentState extends State<UploadImageComponent> {
   Widget framePickImage() {
     return InkWell(
       onTap: () {
-        widget.photoType == PhotoType.familyCard
+        widget.photoType == PhotoType.familyCard ||
+                widget.photoType == PhotoType.gambar
             ? _settingModalBottomSheet(context)
             : showBotSheet(widget.photoType);
       },
@@ -251,57 +264,62 @@ class _UploadImageComponentState extends State<UploadImageComponent> {
         backgroundColor: Colors.transparent,
         context: context,
         builder: (BuildContext context) {
-          return Container(
-            padding: const EdgeInsets.only(top: 10),
-            child: Wrap(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10))),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Upload ${type.descTitle}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
+          return SafeArea(
+            child: Container(
+              padding: const EdgeInsets.only(top: 10),
+              child: Wrap(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10))),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Upload ${type.descTitle}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
                               ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Icon(
-                                  Icons.clear_rounded,
-                                  color: Colors.black.withOpacity(0.5),
-                                ))
-                          ],
-                        ),
-                        descUploadGuide(type),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ButtonComponent(
-                              text: "Ambil ${type.descTitle}",
-                              textColor: MahasColors.light,
-                              btnColor: MahasColors.primary,
-                              borderRadius: 6.0,
-                              onTap: () => widget
-                                  .onTapGetImage!(CameraSource.camera.value)),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Icon(
+                                    Icons.clear_rounded,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ))
+                            ],
+                          ),
+                          type.title == "GAMBAR"
+                              ? const SizedBox(height: 20)
+                              : descUploadGuide(type),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ButtonComponent(
+                                text: "Ambil ${type.descTitle}",
+                                textColor: MahasColors.light,
+                                btnColor: MahasColors.primary,
+                                borderRadius: 6.0,
+                                onTap: () => widget
+                                    .onTapGetImage!(CameraSource.camera.value)),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           );
         });

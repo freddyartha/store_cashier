@@ -69,6 +69,7 @@ class SetupPageController<T> extends ChangeNotifier {
     this.apiToView,
     this.onInit,
     this.useThisBackAction = true,
+    this.onSubmit,
   });
 
   void _init({
@@ -105,6 +106,7 @@ class SetupPageController<T> extends ChangeNotifier {
     if (urlApiGet != null) {
       try {
         final r = await urlApiGet!.doc(idX).get();
+
         if (r.exists) {
           _id = idX;
           setState(() {
@@ -202,8 +204,12 @@ class SetupPageController<T> extends ChangeNotifier {
         try {
           DocumentReference? post;
           _id == null
-              ? post = await urlApiPost!.add(model)
-              : await urlApiPut!.doc(_id).update(model);
+              ? post = await urlApiPost!.add(model).timeout(
+                  const Duration(seconds: 10),
+                  onTimeout: () => Helper.errorToast())
+              : await urlApiPut!.doc(_id).update(model).timeout(
+                  const Duration(seconds: 10),
+                  onTimeout: () => Helper.errorToast());
           editable = false;
           _backRefresh = true;
           await _getModelFromApi(_id ?? post!.id);
@@ -252,6 +258,7 @@ class SetupPageComponent extends StatefulWidget {
   final String? headerLogo;
   final String? headerText;
   final double buttonRadius;
+  final Future<void> Function()? onRefresh;
 
   const SetupPageComponent({
     super.key,
@@ -270,6 +277,7 @@ class SetupPageComponent extends StatefulWidget {
     this.showAppBar = true,
     this.withScaffold = true,
     this.buttonRadius = 10,
+    this.onRefresh,
   });
 
   @override
@@ -388,93 +396,100 @@ class _SetupPageComponentState extends State<SetupPageComponent> {
                 child: Stack(
                   children: [
                     MahasWidget.backgroundWidget(),
-                    SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          widget.headerLogo != null
-                              ? ImageComponent(
-                                  margin: const EdgeInsets.only(top: 20),
-                                  localUrl: widget.headerLogo,
-                                  width: 100,
-                                  height: 100,
-                                )
-                              : MahasWidget.hideWidget(),
-                          widget.headerText != null
-                              ? TextComponent(
-                                  margin: const EdgeInsets.only(top: 10),
-                                  value: widget.headerText,
-                                  fontSize: MahasFontSize.h3,
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: MahasColors.light,
-                                )
-                              : MahasWidget.hideWidget(),
-                          widget.controller._isLoading
-                              ? const ShimmerComponent(
-                                  isCardList: false,
-                                  marginLeft: 10,
-                                  marginRight: 10,
-                                  marginTop: 0,
-                                )
-                              : SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      MahasWidget.uniformCardWidget(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              widget.crossAxisAlignmentChildren,
-                                          children: widget.children(),
-                                        ),
-                                      ),
-                                      Visibility(
-                                        visible: widget.controller.editable,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical:
-                                                widget.childrenPadding ? 10 : 0,
-                                            horizontal:
-                                                widget.childrenPadding ? 10 : 0,
-                                          ),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 2,
-                                                  blurRadius: 5,
-                                                  offset: const Offset(0, 5),
-                                                ),
-                                              ],
-                                            ),
-                                            child: ButtonComponent(
-                                              onTap: widget
-                                                  .controller.submitOnPressed,
-                                              text: widget.btnSubmitText,
-                                              fontSize: MahasFontSize.h6,
-                                              fontWeight: FontWeight.w600,
-                                              textColor: MahasColors.light,
-                                              btnColor: MahasColors.primary,
-                                              borderColor: MahasColors.light,
-                                              borderRadius:
-                                                  MahasThemes.borderRadius / 2,
-                                            ),
+                    RefreshIndicator(
+                      onRefresh: widget.onRefresh ?? () async {},
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            widget.headerLogo != null
+                                ? ImageComponent(
+                                    margin: const EdgeInsets.only(top: 20),
+                                    localUrl: widget.headerLogo,
+                                    width: 100,
+                                    height: 100,
+                                  )
+                                : MahasWidget.hideWidget(),
+                            widget.headerText != null
+                                ? TextComponent(
+                                    margin: const EdgeInsets.only(top: 10),
+                                    value: widget.headerText,
+                                    fontSize: MahasFontSize.h3,
+                                    fontWeight: FontWeight.bold,
+                                    fontColor: MahasColors.light,
+                                  )
+                                : MahasWidget.hideWidget(),
+                            widget.controller._isLoading
+                                ? const ShimmerComponent(
+                                    isCardList: false,
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                    marginTop: 0,
+                                  )
+                                : SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        MahasWidget.uniformCardWidget(
+                                          child: Column(
+                                            crossAxisAlignment: widget
+                                                .crossAxisAlignmentChildren,
+                                            children: widget.children(),
                                           ),
                                         ),
-                                      ),
-                                      Visibility(
-                                        visible:
-                                            widget.childrenAfterButton != null,
-                                        child: Column(
-                                          children:
-                                              widget.childrenAfterButton ?? [],
+                                        Visibility(
+                                          visible: widget.controller.editable,
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: widget.childrenPadding
+                                                  ? 10
+                                                  : 0,
+                                              horizontal: widget.childrenPadding
+                                                  ? 10
+                                                  : 0,
+                                            ),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.5),
+                                                    spreadRadius: 2,
+                                                    blurRadius: 5,
+                                                    offset: const Offset(0, 5),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: ButtonComponent(
+                                                onTap: widget
+                                                    .controller.submitOnPressed,
+                                                text: widget.btnSubmitText,
+                                                fontSize: MahasFontSize.h6,
+                                                fontWeight: FontWeight.w600,
+                                                textColor: MahasColors.light,
+                                                btnColor: MahasColors.primary,
+                                                borderColor: MahasColors.light,
+                                                borderRadius:
+                                                    MahasThemes.borderRadius /
+                                                        2,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        Visibility(
+                                          visible: widget.childrenAfterButton !=
+                                              null,
+                                          child: Column(
+                                            children:
+                                                widget.childrenAfterButton ??
+                                                    [],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],

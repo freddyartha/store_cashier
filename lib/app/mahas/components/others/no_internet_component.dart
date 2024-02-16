@@ -8,10 +8,12 @@ import '../mahas_themes.dart';
 
 class NoInternetConnectionPage extends StatelessWidget {
   final Function()? onPressed;
+  final String message;
 
   const NoInternetConnectionPage({
     super.key,
     this.onPressed,
+    this.message = "Pastikan internetmu lancar, cek ulang jaringan di tempatmu",
   });
 
   @override
@@ -34,17 +36,16 @@ class NoInternetConnectionPage extends StatelessWidget {
               textAlign: TextAlign.center,
               margin: EdgeInsets.only(top: 10),
             ),
-            const TextComponent(
-              value:
-                  "Pastikan internetmu lancar, cek ulang jaringan di tempatmu",
+            TextComponent(
+              value: message,
               fontSize: MahasFontSize.h6,
               textAlign: TextAlign.center,
-              margin: EdgeInsets.only(bottom: 15),
+              margin: const EdgeInsets.only(bottom: 15),
             ),
             Visibility(
               visible: onPressed != null ? true : false,
               child: ButtonComponent(
-                onTap: onPressed ?? (){},
+                onTap: onPressed ?? () {},
                 text: "Coba Lagi",
                 fontSize: MahasFontSize.h6,
                 fontWeight: FontWeight.w600,

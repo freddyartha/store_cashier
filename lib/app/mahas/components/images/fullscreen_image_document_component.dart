@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../services/helper.dart';
@@ -52,39 +53,48 @@ class _FullScreenImageDocumentComponentState
               ? ImageComponent(
                   networkUrl: widget.image,
                 )
-              : widget.documentSelectedCallBack != null &&
-                      widget.onlyPreviewAfterBrowse!
-                  ? ImageComponent(
-                      imageFromFile: widget.image,
+              : widget.image.toString().contains("file:")
+                  ? FadeInImage(
+                      placeholder:
+                          const AssetImage("assets/images/loading_lands.gif"),
+                      image: Image.file(File(widget.image.toString())).image,
+                      height: Get.height,
+                      width: Get.width,
+                      fit: BoxFit.cover,
                     )
-                  : Stack(
-                      children: [
-                        widget.documentSelectedCallBack != null ||
-                                widget.onlyPreviewAfterBrowse!
-                            ? SfPdfViewer.file(File(
-                                widget.pdfPath!,
-                              ))
-                            : SfPdfViewer.network(
-                                widget.pdfPath!,
-                                onDocumentLoadFailed: (failed) {
-                                  setState(() {
-                                    _isReady = true;
-                                  });
-                                  Helper.dialogWarning(errorMessage);
-                                },
-                                onDocumentLoaded: (loaded) {
-                                  setState(() {
-                                    _isReady = true;
-                                  });
-                                },
-                              ),
-                        Visibility(
-                          visible: !_isReady &&
-                              widget.documentSelectedCallBack == null,
-                          child: const CircularProgressIndicator(),
+                  : widget.documentSelectedCallBack != null &&
+                          widget.onlyPreviewAfterBrowse!
+                      ? ImageComponent(
+                          imageFromFile: widget.image,
                         )
-                      ],
-                    ),
+                      : Stack(
+                          children: [
+                            widget.documentSelectedCallBack != null ||
+                                    widget.onlyPreviewAfterBrowse!
+                                ? SfPdfViewer.file(File(
+                                    widget.pdfPath!,
+                                  ))
+                                : SfPdfViewer.network(
+                                    widget.pdfPath!,
+                                    onDocumentLoadFailed: (failed) {
+                                      setState(() {
+                                        _isReady = true;
+                                      });
+                                      Helper.dialogWarning(errorMessage);
+                                    },
+                                    onDocumentLoaded: (loaded) {
+                                      setState(() {
+                                        _isReady = true;
+                                      });
+                                    },
+                                  ),
+                            Visibility(
+                              visible: !_isReady &&
+                                  widget.documentSelectedCallBack == null,
+                              child: const CircularProgressIndicator(),
+                            )
+                          ],
+                        ),
       floatingActionButton: widget.onlyPreviewAfterBrowse!
           ? FloatingActionButton(
               child: const Icon(Icons.close),

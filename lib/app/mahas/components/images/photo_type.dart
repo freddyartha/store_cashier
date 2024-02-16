@@ -1,4 +1,4 @@
-enum PhotoType { ktp, photoProfile, familyCard, selfie, kwitasi }
+enum PhotoType { ktp, photoProfile, familyCard, selfie, kwitasi, gambar }
 
 extension PhotoTypeExtension on PhotoType {
   String get title {
@@ -13,6 +13,8 @@ extension PhotoTypeExtension on PhotoType {
         return "SELFIE";
       case PhotoType.kwitasi:
         return "KWITANSI";
+      case PhotoType.gambar:
+        return "GAMBAR";
       default:
         return "N/A";
     }
@@ -30,6 +32,8 @@ extension PhotoTypeExtension on PhotoType {
         return "Foto Selfie";
       case PhotoType.kwitasi:
         return "Foto Kwitansi";
+      case PhotoType.gambar:
+        return "Gambar";
       default:
         return "N/A";
     }
@@ -51,6 +55,8 @@ extension PhotoTypeExtension on PhotoType {
         ];
       case PhotoType.kwitasi:
         return ["Pastikan informasi didalam kwintasi terlihat dengan jelas."];
+      case PhotoType.gambar:
+        return ["Pastikan gambar terlihat dengan jelas."];
       default:
         return ["N/A"];
     }

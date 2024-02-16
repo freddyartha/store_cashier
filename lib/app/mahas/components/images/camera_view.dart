@@ -107,27 +107,40 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
           ),
           Container(
             width: MediaQuery.of(context).size.width,
-            color: MahasColors.primary,
+            color: MahasColors.dark.withOpacity(0.5),
             height: widget.type == PhotoType.kwitasi ? 90 : 110,
-            child: TextComponent(
-              padding: const EdgeInsets.only(top: 70, left: 20),
-              value: widget.type!.descTitle,
-              fontColor: MahasColors.light,
-              fontSize: MahasFontSize.h3,
-            ),
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 30, 0, 0),
-              child: IconButton(
-                icon: const Icon(Icons.close),
-                iconSize: 20,
-                color: Colors.white,
-                onPressed: _closeCameraView,
+            child: SafeArea(
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    iconSize: 30,
+                    color: Colors.white,
+                    onPressed: _closeCameraView,
+                    padding: const EdgeInsets.only(right: 30, left: 10),
+                  ),
+                  TextComponent(
+                    textAlign: TextAlign.center,
+                    value: widget.type!.descTitle,
+                    fontColor: MahasColors.light,
+                    fontSize: MahasFontSize.h3,
+                  ),
+                ],
               ),
             ),
           ),
+          // Align(
+          //   alignment: Alignment.topLeft,
+          //   child: Padding(
+          //     padding: const EdgeInsets.fromLTRB(8, 30, 0, 0),
+          //     child: IconButton(
+          //       icon: const Icon(Icons.close),
+          //       iconSize: 30,
+          //       color: Colors.white,
+          //       onPressed: _closeCameraView,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -367,14 +380,11 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
   Widget _captureIconWidget() {
     return Container(
       color: Colors.black.withOpacity(0),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-        child: SizedBox(
-          height: bottomWidgetHeight,
-          width: double.infinity,
-          child: Stack(
-            children: _bottomWidgets(),
-          ),
+      child: SizedBox(
+        height: bottomWidgetHeight,
+        width: double.infinity,
+        child: Stack(
+          children: _bottomWidgets(),
         ),
       ),
     );
@@ -408,13 +418,10 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
     } else {
       return [
         Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-            color: MahasColors.light,
-          ),
+          color: MahasColors.dark.withOpacity(0.5),
+          width: MediaQuery.of(context).size.width,
           child: Padding(
-            padding: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 15),
             child: Center(
               child: IconButton(
                 icon: SvgPicture.asset('assets/svg/camera_btn.svg'),
@@ -427,7 +434,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
             ),
           ),
         ),
-        widget.type == PhotoType.ktp
+        widget.type == PhotoType.ktp 
             ? Positioned(
                 top: 30,
                 right: 25,

@@ -14,5 +14,6 @@ class MahasConfig {
     'user was not linked',
     'unexpected end of stream',
     'network_error',
+    'Unable to resolve host',
   ];
 }

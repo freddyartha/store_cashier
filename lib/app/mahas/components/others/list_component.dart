@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:store_cashier/app/mahas/components/others/no_internet_component.dart';
 import 'package:store_cashier/app/mahas/mahas_widget.dart';
 import '../../mahas_colors.dart';
 import '../inputs/input_text_component.dart';
@@ -91,10 +92,11 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
                   padding: EdgeInsets.only(top: 5),
                   child: ShimmerComponent(),
                 ),
-                errorBuilder: (context, error, stackTrace) => EmptyComponent(
-                  isGeneralError: true,
-                  message: error.toString(),
-                ),
+                errorBuilder: (context, error, stackTrace) {
+                  return NoInternetConnectionPage(
+                    message: error.toString(),
+                  );
+                },
                 itemBuilder: (context, doc) {
                   return widget.itemBuilder(doc);
                 },

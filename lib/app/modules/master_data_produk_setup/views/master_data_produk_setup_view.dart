@@ -1,0 +1,103 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:store_cashier/app/mahas/components/images/open_camera_options.dart';
+import 'package:store_cashier/app/mahas/components/images/photo_type.dart';
+import 'package:store_cashier/app/mahas/components/images/upload_image_component.dart';
+import 'package:store_cashier/app/mahas/components/inputs/input_dropdown_component.dart';
+import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
+import 'package:store_cashier/app/mahas/components/pages/setup_page_component.dart';
+
+import '../controllers/master_data_produk_setup_controller.dart';
+
+class MasterDataProdukSetupView
+    extends GetView<MasterDataProdukSetupController> {
+  const MasterDataProdukSetupView({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return SetupPageComponent(
+      title: "Data Produk",
+      controller: controller.formCon,
+      onRefresh: controller.getDropDownValue,
+      children: () => [
+        InputTextComponent(
+          controller: controller.kodeProdukCon,
+          label: "Kode Produk",
+          editable: controller.formCon.editable,
+          isRequired: true,
+          isBorderRectangle: true,
+          marginBottom: 20,
+        ),
+        InputTextComponent(
+          controller: controller.namaProdukCon,
+          label: "Nama Produk",
+          editable: controller.formCon.editable,
+          isRequired: true,
+          isBorderRectangle: true,
+          marginBottom: 20,
+        ),
+        InputDropdownComponent(
+          label: "Unit Satuan Produk",
+          controller: controller.unitProdukCon,
+          editable: controller.formCon.editable,
+          required: true,
+          marginBottom: 20,
+        ),
+        InputDropdownComponent(
+          label: "Kategori Produk",
+          controller: controller.kategoriProdukCon,
+          editable: controller.formCon.editable,
+          required: true,
+          marginBottom: 20,
+        ),
+        InputTextComponent(
+          controller: controller.stokProdukCon,
+          label: "Stok Produk",
+          editable: controller.formCon.editable,
+          isRequired: true,
+          isBorderRectangle: true,
+          marginBottom: 20,
+        ),
+        InputTextComponent(
+          controller: controller.hargaSatuanCon,
+          label: "Harga Satuan Produk",
+          editable: controller.formCon.editable,
+          isRequired: true,
+          isBorderRectangle: true,
+          marginBottom: 20,
+        ),
+        InputTextComponent(
+          controller: controller.persentaseDiskonCon,
+          label: "Persentase Diskon",
+          editable: controller.formCon.editable,
+          isBorderRectangle: true,
+          marginBottom: 20,
+        ),
+        InputTextComponent(
+          controller: controller.orderLevelCon,
+          placeHolder: "Menentukan posisi produk dalam list",
+          label: "Order Level",
+          editable: controller.formCon.editable,
+          isBorderRectangle: true,
+          marginBottom: 20,
+        ),
+        Obx(() {
+          return UploadImageComponent(
+            photoType: PhotoType.gambar,
+            onTapGetImage: (data) async {
+              var image = await OpenCameraOptions.getImage(
+                context,
+                PhotoType.gambar,
+                source: data,
+              );
+              Get.back();
+              controller.imagePath.value = image ?? "";
+            },
+            imagePath: controller.imagePath.value,
+          );
+        }),
+       
+      ],
+    );
+  }
+}
