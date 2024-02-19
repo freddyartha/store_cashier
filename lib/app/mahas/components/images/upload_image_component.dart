@@ -30,7 +30,7 @@ extension CameraSourceExtension on CameraSource {
 class UploadImageComponent extends StatefulWidget {
   final Function(String)? onTapGetImage;
   final PhotoType photoType;
-  final String? imagePath;
+  final List<String>? imagePath;
   final bool isRequired;
   final Color colorLineAndIcon;
   final double? height;
@@ -51,11 +51,20 @@ class UploadImageComponent extends StatefulWidget {
 
 class _UploadImageComponentState extends State<UploadImageComponent> {
   @override
+  void initState() {
+    setState(() {
+      widget.imagePath;
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        widget.imagePath == null || widget.imagePath == ""
+        widget.imagePath == null || widget.imagePath!.isEmpty
             ? framePickImage()
             : imageDoc(widget.imagePath!),
         Row(
@@ -73,25 +82,30 @@ class _UploadImageComponentState extends State<UploadImageComponent> {
                 ))
           ],
         ),
-        Visibility(
-            visible: widget.imagePath != null && widget.imagePath != "",
-            child: InkWell(
-              onTap: () {
-                showEditSheet(widget.imagePath!, widget.photoType);
-              },
-              child: const SizedBox(
-                height: 50,
-                child: Center(
-                  child: Text(
-                    "Ganti Foto",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              ),
-            ))
+        // Visibility(
+        //     visible: widget.imagePath != null && widget.imagePath!.isEmpty,
+        //     child: ListView.builder(
+        //       itemCount: widget.imagePath!.length,
+        //       itemBuilder: (context, index) {
+        //         return InkWell(
+        //           onTap: () {
+        //             showEditSheet(widget.imagePath![index], widget.photoType);
+        //           },
+        //           child: const SizedBox(
+        //             height: 50,
+        //             child: Center(
+        //               child: Text(
+        //                 "Ganti Foto",
+        //                 style: TextStyle(
+        //                   color: Colors.blue,
+        //                   decoration: TextDecoration.underline,
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //         );
+        //       }
+        //     ))
       ],
     );
   }
@@ -181,8 +195,10 @@ class _UploadImageComponentState extends State<UploadImageComponent> {
         });
   }
 
-  Widget imageDoc(String image) {
+  Widget imageDoc(List<String> image) {
     return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 150,
       margin: const EdgeInsets.all(10),
       child: DottedBorder(
         borderType: BorderType.RRect,
@@ -191,31 +207,37 @@ class _UploadImageComponentState extends State<UploadImageComponent> {
         dashPattern: const [4, 0],
         color: widget.colorLineAndIcon,
         padding: const EdgeInsets.all(0),
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context, rootNavigator: true).push(
-              MaterialPageRoute(
-                builder: (context) => FullScreenImageDocumentComponent(
-                  image: image,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: image.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                      builder: (context) => FullScreenImageDocumentComponent(
+                        image: image[index],
+                      ),
+                    ),
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: FadeInImage(
+                    placeholder:
+                        const AssetImage("assets/images/loading_lands.gif"),
+                    image: Image.file(File(image[index])).image,
+                    height: widget.width == null
+                        ? Get.width / 4.5
+                        : Get.width / widget.width!,
+                    width: widget.height == null
+                        ? Get.width / 3
+                        : Get.width / widget.height!,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            );
-          },
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            child: FadeInImage(
-              placeholder: const AssetImage("assets/images/loading_lands.gif"),
-              image: Image.file(File(image)).image,
-              height: widget.width == null
-                  ? Get.width / 4.5
-                  : Get.width / widget.width!,
-              width: widget.height == null
-                  ? Get.width / 3
-                  : Get.width / widget.height!,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+              );
+            }),
       ),
     );
   }

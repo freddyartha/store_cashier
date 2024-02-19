@@ -1,15 +1,20 @@
 import 'dart:convert';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
+import 'package:store_cashier/app/mahas/components/inputs/input_box_component.dart';
+import 'package:store_cashier/app/mahas/components/mahas_themes.dart';
+import 'package:store_cashier/app/mahas/components/texts/text_component.dart';
+import 'package:store_cashier/app/mahas/mahas_font_size.dart';
+import 'package:store_cashier/app/mahas/services/helper.dart';
 
 import '../../mahas_colors.dart';
-import '../../services/helper.dart';
-import 'input_box_component.dart';
 
 enum InputFileType { image, pdf, camera }
 
@@ -17,23 +22,26 @@ class InputFileController {
   final List<PlatformFile> _files = [];
   FilePickerResult? result;
   bool mutipleFile = false;
-  FileType type;
   String? _errorMessage;
   late bool _required;
   bool _isInit = false;
   String? strBase64;
-  List<String> base64String = [];
-  List<String> extension = [];
-  final dynamic tipe;
+  List<String>? fileExtensions;
+  final InputFileType tipe;
   bool urlImage = false;
+  bool isGetPath;
+  bool firebaseImage;
 
   InputFileController({
-    this.type = FileType.image,
     this.mutipleFile = false,
-    this.extension = const ['jpg', 'png'],
+    this.fileExtensions,
     this.tipe = InputFileType.image,
     this.urlImage = false,
+    this.isGetPath = false,
+    this.firebaseImage = false,
   });
+
+  final List<String> _firebaseImages = [];
 
   List<PlatformFile> get values {
     return _files;
@@ -43,25 +51,36 @@ class InputFileController {
     if (_files.isEmpty) {
       strBase64 = null;
       return null;
+    } else if (isGetPath) {
+      PlatformFile platformFile = _files.first;
+      return platformFile;
+    } else {
+      PlatformFile file = _files.first;
+      Uint8List fileBytes = file.bytes!;
+      String base64String = base64Encode(fileBytes);
+      return base64String;
     }
-    PlatformFile file = _files.first;
-    Uint8List fileBytes = file.bytes!;
-    String base64String = base64Encode(fileBytes);
-    return base64String;
   }
 
   dynamic get valueMultiple {
     if (_files.isEmpty) {
       strBase64 = null;
       return null;
+    } else if (isGetPath) {
+      List<PlatformFile> platformFile = [];
+      for (var e in _files) {
+        platformFile.add(e);
+      }
+      return platformFile;
+    } else {
+      List<String> files = [];
+      for (var e in _files) {
+        Uint8List fileBytes = compressImage(e.bytes!, 50);
+        String base64String = base64Encode(fileBytes);
+        files.add(base64String);
+      }
+      return files;
     }
-    List<String> files = [];
-    for (var e in _files) {
-      Uint8List fileBytes = compressImage(e.bytes!, 50);
-      String base64String = base64Encode(fileBytes);
-      files.add(base64String);
-    }
-    return files;
   }
 
   dynamic get valueMultipleArray {
@@ -105,23 +124,20 @@ class InputFileController {
       } else {
         strBase64 = val;
       }
-    } else if (val is List<String>) {
-      for (var e in val) {
-        base64String.add(e.toString());
-      }
     }
   }
 
-  dynamic getPath() async {
-    if (_files.isNotEmpty) {
-      if (kIsWeb) {
-        // return dio.MultipartFile.fromBytes(_files.first.bytes!,
-        //     filename: _files.first.name);
-      } else {
-        // return await dio.MultipartFile.fromFile(_files.single.path!);
+  set firebaseValues(List<String> firebaseLink){
+    _firebaseImages.addAll(firebaseLink);
+  }
+
+  void removeLocalData() {
+    if (_files.isNotEmpty && _files.length > 1) {
+      for (var e in _files) {
+        if (e.path != null) {
+          _files.remove(e);
+        }
       }
-    } else {
-      return null;
     }
   }
 
@@ -132,6 +148,14 @@ class InputFileController {
     }
     if (onChanged != null) {
       onChanged!();
+    }
+  }
+
+  FileType _fileType(InputFileType tipe) {
+    if (tipe == InputFileType.camera || tipe == InputFileType.image) {
+      return FileType.image;
+    } else {
+      return FileType.any;
     }
   }
 
@@ -152,47 +176,27 @@ class InputFileController {
     return true;
   }
 
-  String _inputText(bool editable) {
-    if (_files.isEmpty) {
-      return '';
-    } else if (_files.length == 1) {
-      return _files[0].name;
-    } else {
-      return '${_files.length} files';
-    }
-  }
-
-  Future<void> _viewFileOnPressed() async {
-    if (strBase64 == null) return;
-    Helper.dialogCustomWidget(
-      children: [
+  Future<void> _viewFileOnPressed(String data) async {
+    Helper.dialogFileComponent(
+      [
         Container(
           child: (tipe == InputFileType.image)
-              ? Image.memory(base64Decode(strBase64!))
+              ? Image.memory(base64Decode(data))
               : (tipe == InputFileType.pdf)
                   ? SizedBox(
                       width: 300,
                       height: 400,
                       child: PDFView(
                         pdfData: Uint8List.fromList(
-                          base64Decode(strBase64!),
+                          base64Decode(data),
                         ),
                       ),
                     )
                   : (tipe == InputFileType.camera && urlImage == true)
-                      ? Image.network(strBase64!)
-                      : Image.memory(base64Decode(strBase64!)),
+                      ? Image.network(data)
+                      : Image.memory(base64Decode(data)),
         ),
       ],
-    );
-  }
-
-  void laporanImageOnTap(String url) {
-    Helper.dialogFotoStr(
-      url,
-      "assets/images/logo-nobg.png",
-      isNetworkFoto: true,
-      radius: 10,
     );
   }
 
@@ -200,9 +204,9 @@ class InputFileController {
     if (!editable) return;
     if (mutipleFile == false) _files.clear();
     result = await FilePicker.platform.pickFiles(
-      type: type,
+      type: _fileType(tipe),
       allowMultiple: mutipleFile,
-      allowedExtensions: extension,
+      allowedExtensions: fileExtensions,
       withData: true,
     );
     if (result!.files.isEmpty) return;
@@ -245,6 +249,16 @@ class InputFileController {
       onChanged!();
     }
   }
+
+  void _clearIndexOnTab(int index) {
+    _files.remove(_files[index]);
+    if (_isInit) {
+      setState(() {});
+    }
+    if (onChanged != null) {
+      onChanged!();
+    }
+  }
 }
 
 class InputFileComponent extends StatefulWidget {
@@ -252,16 +266,18 @@ class InputFileComponent extends StatefulWidget {
   final bool editable;
   final String? label;
   final bool required;
-  final double? borderRadius;
+  final bool withIcon;
+  final String? placeHolder;
 
   const InputFileComponent({
-    super.key,
+    Key? key,
     required this.controller,
     this.editable = true,
-    required this.label,
+    this.label,
     this.required = false,
-    this.borderRadius,
-  });
+    this.withIcon = false,
+    this.placeHolder = "Upload Lampiran (Max 2MB) *",
+  }) : super(key: key);
 
   @override
   InputFileComponentState createState() => InputFileComponentState();
@@ -280,113 +296,266 @@ class InputFileComponentState extends State<InputFileComponent> {
     return Column(
       children: [
         InputBoxComponent(
-          borderRadius: widget.borderRadius,
-          icon: !widget.editable
-              ? null
-              : widget.controller.type == FileType.image
-                  ? (widget.controller.mutipleFile
-                      ? FontAwesomeIcons.images
-                      : Icons.image)
-                  : (widget.controller.mutipleFile
-                      ? Icons.file_copy
-                      : FontAwesomeIcons.file),
-          editable: widget.editable,
-          label: widget.label,
-          onTap: !widget.editable
-              ? null
-              : () {
-                  if (widget.controller.tipe == InputFileType.camera) {
-                    widget.controller._onCameraTab(true);
-                  } else {
-                    widget.controller._onTab(true);
-                  }
-                },
-          childText: widget.controller._inputText(widget.editable),
-          alowClear: widget.editable && widget.controller._files.isNotEmpty,
           errorMessage: widget.controller._errorMessage,
-          clearOnTab: () => widget.controller._clearOnTab(),
+          label: widget.label,
           children: !widget.editable
-              ? widget.controller.base64String.isEmpty
-                  ? TextButton(
-                      onPressed: () {
-                        widget.controller.strBase64 == null
-                            ? null
-                            : widget.controller._viewFileOnPressed();
-                      },
-                      child: widget.controller.strBase64 == null
-                          ? const Text(
-                              "No File Included",
-                              style: TextStyle(color: MahasColors.grey),
-                            )
-                          : const Text("View File"),
+              ? widget.label == null
+                  ? const TextComponent(
+                      value: "Lampiran",
+                      isMuted: true,
+                      textAlign: TextAlign.start,
+                      fontSize: MahasFontSize.h6,
                     )
-                  : GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                      ),
-                      itemCount: widget.controller.base64String.length,
-                      shrinkWrap: true,
-                      physics: const ScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        var item = widget.controller.base64String[index];
-                        return InkWell(
-                          onTap: () {
-                            widget.controller.laporanImageOnTap(item);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: (widget.controller.urlImage == true)
-                                ? Image.network(item, loadingBuilder:
-                                    (BuildContext context, Widget child,
-                                        ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    } else {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      );
-                                    }
-                                  })
-                                : Image.memory(
-                                    base64Decode(item),
-                                  ),
+                  : const SizedBox()
+              : Column(
+                  children: [
+                    InkWell(
+                      onTap: !widget.editable
+                          ? null
+                          : () {
+                              if (widget.controller.tipe ==
+                                  InputFileType.camera) {
+                                widget.controller._onCameraTab(true);
+                              } else {
+                                widget.controller._onTab(true);
+                              }
+                              setState(() {
+                                _viewImage();
+                              });
+                            },
+                      child: DottedBorder(
+                        borderPadding: const EdgeInsets.all(2),
+                        radius: Radius.circular(MahasThemes.borderRadius),
+                        strokeWidth: 1,
+                        borderType: BorderType.RRect,
+                        color: widget.controller._errorMessage == null
+                            ? MahasColors.dark
+                            : MahasColors.danger,
+                        dashPattern: const [5, 3],
+                        child: Container(
+                          height: 45,
+                          width: Get.width,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(MahasThemes.borderRadius),
+                            color: MahasColors.dark
+                                .withOpacity(widget.editable ? .01 : .05),
                           ),
-                        );
-                      },
-                    )
-              : null,
-        ),
-        Visibility(
-          visible: widget.controller.mutipleFile == true,
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-            ),
-            itemCount: widget.controller._files.length,
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Image.memory(
-                  widget.controller._files[index].bytes!,
-                  fit: BoxFit.cover,
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Visibility(
+                                visible: widget.withIcon && widget.editable,
+                                child: SizedBox(
+                                  width: 35,
+                                  height: 40,
+                                  child: InkWell(
+                                    onTap: widget.controller._clearOnTab,
+                                    child: Icon(
+                                      widget.controller.tipe == FileType.image
+                                          ? (widget.controller.mutipleFile
+                                              ? FontAwesomeIcons.images
+                                              : Icons.image)
+                                          : (widget.controller.mutipleFile
+                                              ? Icons.file_copy
+                                              : FontAwesomeIcons.file),
+                                      size: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: TextComponent(
+                                  value: widget.placeHolder,
+                                  isMuted: true,
+                                  textAlign: TextAlign.center,
+                                  fontSize: MahasFontSize.h6,
+                                ),
+                              ),
+                              Visibility(
+                                visible: widget.controller._files.isNotEmpty &&
+                                        widget.controller._files.length == 1
+                                    ? true
+                                    : false,
+                                child: SizedBox(
+                                  width: 35,
+                                  height: 40,
+                                  child: InkWell(
+                                    onTap: widget.controller._clearOnTab,
+                                    child: Icon(
+                                      FontAwesomeIcons.xmark,
+                                      color: MahasColors.danger,
+                                      size: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            },
-          ),
+        ),
+        _viewImage(),
+        const SizedBox(
+          height: 10,
         ),
       ],
     );
+  }
+
+  Widget _viewImage() {
+    return widget.controller._files.isEmpty && !widget.editable
+        ? const Text(
+            "No File Included",
+            style: TextStyle(color: MahasColors.grey),
+          )
+        : widget.controller._files.length == 1
+            ? InkWell(
+                onTap: () => widget.controller._viewFileOnPressed(
+                  widget.controller.tipe == InputFileType.camera &&
+                          widget.controller.urlImage == true
+                      ? widget.controller._files[0].path!
+                      : base64Encode(widget.controller._files[0].bytes!),
+                ),
+                child: Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: MahasColors.dark),
+                    ),
+                    padding: const EdgeInsets.all(5),
+                    width: 150,
+                    height: 200,
+                    child: (widget.controller.tipe == InputFileType.image)
+                        ? Image.memory(widget.controller._files[0].bytes!)
+                        : (widget.controller.tipe == InputFileType.pdf)
+                            ? Stack(
+                                children: [
+                                  PDFView(
+                                    enableSwipe: false,
+                                    pdfData: Uint8List.fromList(
+                                      widget.controller._files[0].bytes!,
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () =>
+                                        widget.controller._viewFileOnPressed(
+                                      widget.controller.tipe ==
+                                                  InputFileType.camera &&
+                                              widget.controller.urlImage == true
+                                          ? widget.controller._files[0].path!
+                                          : base64Encode(widget
+                                              .controller._files[0].bytes!),
+                                    ),
+                                    child: const SizedBox(
+                                      width: 150,
+                                      height: 200,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : (widget.controller.tipe == InputFileType.camera &&
+                                    widget.controller.urlImage == true)
+                                ? Image.network(
+                                    widget.controller._files[0].path!)
+                                : Image.memory(
+                                    widget.controller._files[0].bytes!),
+                  ),
+                ),
+              )
+            : GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                ),
+                itemCount: widget.controller._files.length,
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Stack(
+                    children: [
+                      Container(
+                        width: 150,
+                        height: 200,
+                        margin: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: MahasColors.dark),
+                        ),
+                        padding: const EdgeInsets.all(5),
+                        child: InkWell(
+                          onTap: () => widget.controller._viewFileOnPressed(
+                            widget.controller.tipe == FileType.media &&
+                                    widget.controller.urlImage == true
+                                ? widget.controller._files[index].path!
+                                : base64Encode(
+                                    widget.controller._files[index].bytes!),
+                          ),
+                          child: (widget.controller.tipe == FileType.any)
+                              ? Stack(
+                                  children: [
+                                    PDFView(
+                                      enableSwipe: false,
+                                      pdfData: Uint8List.fromList(
+                                        widget.controller._files[index].bytes!,
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () =>
+                                          widget.controller._viewFileOnPressed(
+                                        widget.controller.tipe ==
+                                                    InputFileType.camera &&
+                                                widget.controller.urlImage ==
+                                                    true
+                                            ? widget
+                                                .controller._files[index].path!
+                                            : base64Encode(widget.controller
+                                                ._files[index].bytes!),
+                                      ),
+                                      child: const SizedBox(
+                                        width: 150,
+                                        height: 200,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : (widget.controller.tipe ==
+                                          InputFileType.camera &&
+                                      widget.controller.urlImage == true)
+                                  ? Image.network(
+                                      widget.controller._files[index].path!)
+                                  : Image.memory(
+                                      widget.controller._files[index].bytes!),
+                        ),
+                      ),
+                      Visibility(
+                        visible: widget.controller._files.length > 1 &&
+                                widget.editable
+                            ? true
+                            : false,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                            onTap: () =>
+                                widget.controller._clearIndexOnTab(index),
+                            child: SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: Icon(
+                                FontAwesomeIcons.xmark,
+                                color: MahasColors.danger,
+                                size: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
   }
 }

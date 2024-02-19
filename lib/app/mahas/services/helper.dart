@@ -435,6 +435,35 @@ class Helper {
     );
   }
 
+  static Future dialogFileComponent(List<Widget> children) async {
+    await Get.dialog(
+      AlertDialog(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              MahasThemes.borderRadius,
+            ),
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: children,
+        ),
+        contentPadding: const EdgeInsets.all(10),
+        actionsPadding:
+            const EdgeInsets.only(top: 0, bottom: 10, left: 10, right: 10),
+        actions: [
+          TextButton(
+            child: const Text("Close"),
+            onPressed: () {
+              Get.back(result: false);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   static Future<List<int>> toByte(File file) async {
     List<int> byteData = await file.readAsBytes();
     return byteData;

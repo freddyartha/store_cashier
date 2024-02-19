@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:store_cashier/app/firestore_query/reusable_firestore_query.dart';
+import 'package:store_cashier/app/mahas/components/images/firebase_image_component.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_dropdown_component.dart';
-import 'package:store_cashier/app/mahas/components/inputs/input_file_component.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
 import 'package:store_cashier/app/mahas/components/pages/setup_page_component.dart';
 import 'package:store_cashier/app/mahas/mahas_config.dart';
@@ -27,14 +26,12 @@ class MasterDataProdukSetupController extends GetxController {
       InputTextController(type: InputTextType.number);
   final InputTextController orderLevelCon =
       InputTextController(type: InputTextType.number);
-  final InputFileController fileCon = InputFileController(mutipleFile: true);
-
-  RxString imagePath = "".obs;
-  RxString linkFotoProduk = "".obs;
-
+  final FirebaseImageController fileCon = FirebaseImageController();
   late SetupPageController formCon;
-  final Reference storageReference = FirebaseStorage.instance.ref(
-      "${MahasConfig.profileModel.companyId!}/${MahasConfig.profileModel.companyId!}-${DateTime.now()}");
+  final Reference imageRef = FirebaseStorage.instance.ref("produk");
+
+  RxList<String> linkFotoProduk = <String>[].obs;
+
   @override
   void onInit() {
     formCon = SetupPageController(
@@ -52,7 +49,7 @@ class MasterDataProdukSetupController extends GetxController {
         "hargaProduk": hargaSatuanCon.value,
         "diskonPersen": persentaseDiskonCon.value,
         "reorderLevel": orderLevelCon.value,
-        "fotoProduk": linkFotoProduk.value,
+        "fotoProduk": linkFotoProduk,
         if (id == null) "createdAt": FieldValue.serverTimestamp(),
         if (id == null) "createdBy": auth.currentUser!.uid,
         "updatedAt": FieldValue.serverTimestamp(),
@@ -66,15 +63,19 @@ class MasterDataProdukSetupController extends GetxController {
         if (!stokProdukCon.isValid) return false;
         if (!hargaSatuanCon.isValid) return false;
 
-        if (imagePath.value != "") {
-          storageReference.putFile(File(imagePath.value)).whenComplete(
-            () async {
-              String downloadURL = await storageReference.getDownloadURL();
-              linkFotoProduk.value = downloadURL;
-            },
-          );
+        if (fileCon.values.isNotEmpty) {
+          for (var i in fileCon.values) {
+            String fileName =
+                "${MahasConfig.profileModel.companyId!}/${Helper.idGenerator()}.${i.extension}";
+            imageRef.child(fileName).putFile(File(i.path!)).whenComplete(
+              () async {
+                String downloadURL =
+                    await imageRef.child(fileName).getDownloadURL();
+                linkFotoProduk.add(downloadURL);
+              },
+            );
+          }
         }
-        print(linkFotoProduk.value);
 
         return true;
       },
@@ -88,8 +89,7 @@ class MasterDataProdukSetupController extends GetxController {
         hargaSatuanCon.value = model.hargaproduk;
         persentaseDiskonCon.value = model.diskonpersen;
         orderLevelCon.value = model.reorderlevel;
-        var data =  await FirebaseStorage.instance.ref(MahasConfig.profileModel.companyId!).child(model.fotoProduk!).getData();
-        print (data.toString());
+        fileCon.values = model.fotoProduk ?? [];
       },
       itemKey: (e) => e['id'],
       onInit: () async {

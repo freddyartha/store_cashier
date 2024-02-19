@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:store_cashier/app/mahas/components/images/open_camera_options.dart';
-import 'package:store_cashier/app/mahas/components/images/photo_type.dart';
-import 'package:store_cashier/app/mahas/components/images/upload_image_component.dart';
+import 'package:store_cashier/app/mahas/components/images/firebase_image_component.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_dropdown_component.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
 import 'package:store_cashier/app/mahas/components/pages/setup_page_component.dart';
@@ -81,22 +79,11 @@ class MasterDataProdukSetupView
           isBorderRectangle: true,
           marginBottom: 20,
         ),
-        Obx(() {
-          return UploadImageComponent(
-            photoType: PhotoType.gambar,
-            onTapGetImage: (data) async {
-              var image = await OpenCameraOptions.getImage(
-                context,
-                PhotoType.gambar,
-                source: data,
-              );
-              Get.back();
-              controller.imagePath.value = image ?? "";
-            },
-            imagePath: controller.imagePath.value,
-          );
-        }),
-       
+        FirebaseImageComponent(
+          controller: controller.fileCon,
+          label: "Gambar",
+          editable: controller.formCon.editable,
+        ),
       ],
     );
   }

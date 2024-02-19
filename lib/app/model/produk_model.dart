@@ -13,7 +13,7 @@ class ProdukModel {
   double? hargaproduk;
   double? diskonpersen;
   double? reorderlevel;
-  String? fotoProduk;
+  List<String>? fotoProduk;
   Timestamp? createdAt;
   String? createdBy;
   Timestamp? updatedAt;
@@ -40,7 +40,8 @@ class ProdukModel {
         MahasFormat.dynamicToDouble(dynamicData['diskonPersen']);
     model.reorderlevel =
         MahasFormat.dynamicToDouble(dynamicData['reorderLevel']);
-    // model.fotoProduk = dynamicData['fotoProduk'];
+    model.fotoProduk =
+        List<String>.from(dynamicData['fotoProduk'].map((x) => x));
     model.createdAt = dynamicData['createdAt'];
     model.createdBy = dynamicData['createdBy'];
     model.updatedAt = dynamicData['updatedAt'];
@@ -60,7 +61,7 @@ class ProdukModel {
       'hargaProduk': data.hargaproduk,
       'diskonPersen': data.diskonpersen,
       'reorderLevel': data.reorderlevel,
-      // 'fotoProduk': data.fotoProduk,
+      'fotoProduk': data.fotoProduk,
       'createdAt': data.createdAt,
       'createdBy': data.createdBy,
       'updatedAt': data.updatedAt,
