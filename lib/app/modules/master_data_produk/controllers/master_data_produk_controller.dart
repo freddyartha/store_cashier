@@ -20,10 +20,10 @@ class MasterDataProdukController extends GetxController {
     );
     filterCon.onEditingComplete = () => listCon.query = produkList.value =
         FireStoreQuery.produkList
-            .where('namaProdukLowerCase',
+            .where('nama_produk_lowercase',
                 isGreaterThanOrEqualTo:
                     filterCon.value.toString().toLowerCase())
-            .where('namaProdukLowerCase',
+            .where('nama_produk_lowercase',
                 isLessThanOrEqualTo:
                     '${filterCon.value.toString().toLowerCase()}\uf8ff')
             .withConverter<ProdukModel>(

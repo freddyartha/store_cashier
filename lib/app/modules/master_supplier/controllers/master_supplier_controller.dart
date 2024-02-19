@@ -21,10 +21,10 @@ class MasterSupplierController extends GetxController {
     );
     filterCon.onEditingComplete = () => listCon.query = supplierList.value =
         FireStoreQuery.supplierList
-            .where('namaSupplierLowerCase',
+            .where('nama_supplier_lowercase',
                 isGreaterThanOrEqualTo:
                     filterCon.value.toString().toLowerCase())
-            .where('namaSupplierLowerCase',
+            .where('nama_supplier_lowercase',
                 isLessThanOrEqualTo:
                     '${filterCon.value.toString().toLowerCase()}\uf8ff')
             .withConverter<SupplierModel>(

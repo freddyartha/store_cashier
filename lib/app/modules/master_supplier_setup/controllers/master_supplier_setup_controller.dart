@@ -23,12 +23,12 @@ class MasterSupplierSetupController extends GetxController {
       urlApiPut: FireStoreQuery.supplierList,
       urlApiDelete: FireStoreQuery.supplierList,
       bodyApi: (id) => {
-        "kodeSupplier": kodeSupplierCon.value,
-        "namaSupplier": namaSupplierCon.value,
-        "namaSupplierLowerCase": namaSupplierCon.value.toString().toLowerCase(),
-        "kontakSupplier": kontakSupplierCon.value,
-        "emailSupplier": emailSupplierCon.value,
-        "alamatSupplier": alamatSupplierCon.value,
+        "kode_supplier": kodeSupplierCon.value,
+        "nama_supplier": namaSupplierCon.value,
+        "nama_supplier_lowercase": namaSupplierCon.value.toString().toLowerCase(),
+        "kontak_supplier": kontakSupplierCon.value,
+        "email_supplier": emailSupplierCon.value,
+        "alamat_supplier": alamatSupplierCon.value,
         if (id == null) "createdAt": FieldValue.serverTimestamp(),
         if(id == null)"createdBy": auth.currentUser!.uid,
         "updatedAt": FieldValue.serverTimestamp(),
@@ -36,11 +36,11 @@ class MasterSupplierSetupController extends GetxController {
       },
       apiToView: (json) {
         var model = SupplierModel.fromDynamic(json);
-        kodeSupplierCon.value = model.kodesupplier;
-        namaSupplierCon.value = model.namasupplier;
-        kontakSupplierCon.value = model.kontaksupplier;
-        emailSupplierCon.value = model.emailsupplier;
-        alamatSupplierCon.value = model.alamatsupplier;
+        kodeSupplierCon.value = model.kodeSupplier;
+        namaSupplierCon.value = model.namaSupplier;
+        kontakSupplierCon.value = model.kontakSupplier;
+        emailSupplierCon.value = model.emailSupplier;
+        alamatSupplierCon.value = model.alamatSupplier;
       },
       itemKey: (e) => e['id'],
     );

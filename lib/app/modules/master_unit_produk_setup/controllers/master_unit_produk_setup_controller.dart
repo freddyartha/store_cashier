@@ -21,7 +21,7 @@ class MasterUnitProdukSetupController extends GetxController {
       urlApiDelete: FireStoreQuery.unitProdukList,
       bodyApi: (id) => {
         "unit": kodeUnitCon.value,
-        "unitLowerCase": kodeUnitCon.value.toString().toLowerCase(),
+        "unit_lowercase": kodeUnitCon.value.toString().toLowerCase(),
         "keterangan": unitKeteranganCon.value,
         if (id == null) "createdAt": FieldValue.serverTimestamp(),
         if (id == null) "createdBy": auth.currentUser!.uid,

@@ -204,12 +204,8 @@ class SetupPageController<T> extends ChangeNotifier {
         try {
           DocumentReference? post;
           _id == null
-              ? post = await urlApiPost!.add(model).timeout(
-                  const Duration(seconds: 10),
-                  onTimeout: () => Helper.errorToast())
-              : await urlApiPut!.doc(_id).update(model).timeout(
-                  const Duration(seconds: 10),
-                  onTimeout: () => Helper.errorToast());
+              ? post = await urlApiPost!.add(model)
+              : await urlApiPut!.doc(_id).update(model);
           editable = false;
           _backRefresh = true;
           await _getModelFromApi(_id ?? post!.id);

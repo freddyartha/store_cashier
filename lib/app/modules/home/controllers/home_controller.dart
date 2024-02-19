@@ -74,6 +74,12 @@ class HomeController extends GetxController {
           assetImage: "assets/images/logo.png",
           onTab: supplierOnTap),
     );
+    menus.add(
+      MenuItemModel(
+          title: "Master Customer",
+          assetImage: "assets/images/logo.png",
+          onTab: customerOnTap),
+    );
   }
 
   void unitOnTap() {
@@ -90,5 +96,8 @@ class HomeController extends GetxController {
 
   void supplierOnTap() {
     Get.toNamed(Routes.MASTER_SUPPLIER);
+  }
+  void customerOnTap() {
+    Get.toNamed(Routes.MASTER_DATA_CUSTOMER);
   }
 }

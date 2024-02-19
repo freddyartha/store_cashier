@@ -38,16 +38,16 @@ class MasterSupplierView extends GetView<MasterSupplierController> {
                 child: ListTile(
                   onTap: () => controller.toSetup(id: e.id),
                   title: TextComponent(
-                    value: item.namasupplier,
+                    value: item.namaSupplier,
                     fontSize: MahasFontSize.h6,
                     fontWeight: FontWeight.w600,
                   ),
                   subtitle: TextComponent(
-                    value: item.kontaksupplier,
+                    value: item.kontakSupplier,
                     isMuted: true,
                   ),
                   trailing: TextComponent(
-                    value: item.kodesupplier,
+                    value: item.kodeSupplier,
                     isMuted: true,
                   ),
                 ),

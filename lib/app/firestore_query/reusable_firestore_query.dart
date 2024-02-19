@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:store_cashier/app/mahas/mahas_config.dart';
+import 'package:store_cashier/app/model/customer_model.dart';
 import 'package:store_cashier/app/model/kategori_produk_model.dart';
 import 'package:store_cashier/app/model/produk_model.dart';
 import 'package:store_cashier/app/model/supplier_model.dart';
@@ -26,6 +27,9 @@ class FireStoreQuery {
       .collection("supplier");
   static CollectionReference produkList =
       tableCompany.doc(MahasConfig.profileModel.companyId).collection("produk");
+  static CollectionReference customerList = tableCompany
+      .doc(MahasConfig.profileModel.companyId)
+      .collection("customer");
 
   //default queries
   static Query<UnitprodukModel> unitProdukListDefaultQuery = unitProdukList
@@ -43,14 +47,20 @@ class FireStoreQuery {
             toFirestore: (data, _) => KategoriprodukModel.toJSon(data),
           );
   static Query<SupplierModel> supplierListDefaultQuery = supplierList
-      .where("namaSupplier", isNull: false)
+      .where("nama_supplier", isNull: false)
       .withConverter<SupplierModel>(
         fromFirestore: (snapshot, _) => SupplierModel.fromDynamic(snapshot),
         toFirestore: (data, _) => SupplierModel.toJSon(data),
       );
   static Query<ProdukModel> produkListDefaultQuery =
-      produkList.where("namaProduk", isNull: false).withConverter<ProdukModel>(
+      produkList.where("nama_produk", isNull: false).withConverter<ProdukModel>(
             fromFirestore: (snapshot, _) => ProdukModel.fromDynamic(snapshot),
             toFirestore: (data, _) => ProdukModel.toJSon(data),
           );
+  static Query<CustomerModel> customerListDefaultQuery = customerList
+      .where("nama_customer", isNull: false)
+      .withConverter<CustomerModel>(
+        fromFirestore: (snapshot, _) => CustomerModel.fromDynamic(snapshot),
+        toFirestore: (data, _) => CustomerModel.toJSon(data),
+      );
 }

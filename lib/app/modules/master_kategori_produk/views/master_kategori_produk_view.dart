@@ -25,7 +25,7 @@ class MasterKategoriProdukView extends GetView<MasterKategoriProdukController> {
             searchTextComponent: InputTextComponent(
               edgeInsets: const EdgeInsets.only(left: 5),
               borderRadius: Radius.zero,
-              placeHolder: "Cari Keterangan...",
+              placeHolder: "Cari Kategori...",
               fillColor: MahasColors.light,
               marginBottom: 0,
               controller: controller.filterCon,

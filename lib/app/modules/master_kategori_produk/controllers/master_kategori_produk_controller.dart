@@ -21,10 +21,10 @@ class MasterKategoriProdukController extends GetxController {
     );
     filterCon.onEditingComplete = () => listCon.query =
         kategoriProdukList.value = FireStoreQuery.kategoriProdukList
-            .where('kategoriLowerCase',
+            .where('kategori_lowercase',
                 isGreaterThanOrEqualTo:
                     filterCon.value.toString().toLowerCase())
-            .where('kategoriLowerCase',
+            .where('kategori_lowercase',
                 isLessThanOrEqualTo:
                     '${filterCon.value.toString().toLowerCase()}\uf8ff')
             .withConverter<KategoriprodukModel>(

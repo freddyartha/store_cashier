@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UnitprodukModel {
   String? unit;
-  String? unitLowerCase;
+  String? unitLowercase;
   String? keterangan;
   Timestamp? createdAt;
   String? createdBy;
@@ -22,7 +22,7 @@ class UnitprodukModel {
     final model = UnitprodukModel();
 
     model.unit = dynamicData['unit'];
-    model.unitLowerCase = dynamicData['unitLowerCase'];
+    model.unitLowercase = dynamicData['unit_lowercase'];
     model.keterangan = dynamicData['keterangan'];
     model.createdAt = dynamicData['createdAt'];
     model.createdBy = dynamicData['createdBy'];
@@ -35,7 +35,7 @@ class UnitprodukModel {
   static Map<String, dynamic> toJSon(UnitprodukModel data) {
     var mapData = {
       'unit': data.unit,
-      'unitLowerCase': data.unitLowerCase,
+      'unit_lowercase': data.unitLowercase,
       'keterangan': data.keterangan,
       'createdAt': data.createdAt,
       'createdBy': data.createdBy,

@@ -19,6 +19,8 @@ abstract class Routes {
   static const MASTER_SUPPLIER = _Paths.MASTER_SUPPLIER;
   static const MASTER_SUPPLIER_SETUP = _Paths.MASTER_SUPPLIER_SETUP;
   static const MASTER_DATA_PRODUK_SETUP = _Paths.MASTER_DATA_PRODUK_SETUP;
+  static const MASTER_DATA_CUSTOMER = _Paths.MASTER_DATA_CUSTOMER;
+  static const MASTER_DATA_CUSTOMER_SETUP = _Paths.MASTER_DATA_CUSTOMER_SETUP;
 }
 
 abstract class _Paths {
@@ -36,4 +38,6 @@ abstract class _Paths {
   static const MASTER_SUPPLIER = '/master-supplier';
   static const MASTER_SUPPLIER_SETUP = '/master-supplier-setup';
   static const MASTER_DATA_PRODUK_SETUP = '/master-data-produk-setup';
+  static const MASTER_DATA_CUSTOMER = '/master-data-customer';
+  static const MASTER_DATA_CUSTOMER_SETUP = '/master-data-customer-setup';
 }

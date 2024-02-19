@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class KategoriprodukModel {
   String? kategori;
-  String? kategoriLowerCase;
+  String? kategoriLowercase;
   String? keterangan;
   Timestamp? createdAt;
   String? createdBy;
@@ -21,7 +21,7 @@ class KategoriprodukModel {
     final model = KategoriprodukModel();
 
     model.kategori = dynamicData['kategori'];
-    model.kategoriLowerCase = dynamicData['kategoriLowerCase'];
+    model.kategoriLowercase = dynamicData['kategori_lowercase'];
     model.keterangan = dynamicData['keterangan'];
     model.createdAt = dynamicData['createdAt'];
     model.createdBy = dynamicData['createdBy'];
@@ -34,7 +34,7 @@ class KategoriprodukModel {
   static Map<String, dynamic> toJSon(KategoriprodukModel data) {
     var mapData = {
       'kategori': data.kategori,
-      'kategoriLowerCase': data.kategoriLowerCase,
+      'kategori_lowercase': data.kategoriLowercase,
       'keterangan': data.keterangan,
       'createdAt': data.createdAt,
       'createdBy': data.createdBy,

@@ -21,10 +21,10 @@ class MasterUnitProdukController extends GetxController {
     );
     filterCon.onEditingComplete = () => listCon.query = unitProdukList.value =
         FireStoreQuery.unitProdukList
-            .where('unitLowerCase',
+            .where('unit_lowercase',
                 isGreaterThanOrEqualTo:
                     filterCon.value.toString().toLowerCase())
-            .where('unitLowerCase',
+            .where('unit_lowercase',
                 isLessThanOrEqualTo:
                     '${filterCon.value.toString().toLowerCase()}\uf8ff')
             .withConverter<UnitprodukModel>(

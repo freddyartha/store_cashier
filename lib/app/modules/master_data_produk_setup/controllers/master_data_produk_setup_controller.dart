@@ -40,16 +40,16 @@ class MasterDataProdukSetupController extends GetxController {
       urlApiPut: FireStoreQuery.produkList,
       urlApiDelete: FireStoreQuery.produkList,
       bodyApi: (id) => {
-        "kodeProduk": kodeProdukCon.value,
-        "namaProduk": namaProdukCon.value,
-        "namaProdukLowerCase": namaProdukCon.value.toString().toLowerCase(),
-        "unitId": unitProdukCon.value,
-        "kategoriId": kategoriProdukCon.value,
-        "stokProduk": stokProdukCon.value,
-        "hargaProduk": hargaSatuanCon.value,
-        "diskonPersen": persentaseDiskonCon.value,
-        "reorderLevel": orderLevelCon.value,
-        "fotoProduk": linkFotoProduk,
+        "kode_produk": kodeProdukCon.value,
+        "nama_produk": namaProdukCon.value,
+        "nama_produk_lowercase": namaProdukCon.value.toString().toLowerCase(),
+        "unit_id": unitProdukCon.value,
+        "kategori_id": kategoriProdukCon.value,
+        "stok_produk": stokProdukCon.value,
+        "harga_produk": hargaSatuanCon.value,
+        "diskon_persen": persentaseDiskonCon.value,
+        "reorder_level": orderLevelCon.value,
+        "foto_produk": linkFotoProduk,
         if (id == null) "createdAt": FieldValue.serverTimestamp(),
         if (id == null) "createdBy": auth.currentUser!.uid,
         "updatedAt": FieldValue.serverTimestamp(),
@@ -81,13 +81,13 @@ class MasterDataProdukSetupController extends GetxController {
       },
       apiToView: (json) async {
         var model = ProdukModel.fromDynamic(json);
-        kodeProdukCon.value = model.kodeproduk;
-        namaProdukCon.value = model.namaproduk;
-        unitProdukCon.value = model.unitid;
-        kategoriProdukCon.value = model.kategoriid;
-        stokProdukCon.value = model.stokproduk;
-        hargaSatuanCon.value = model.hargaproduk;
-        persentaseDiskonCon.value = model.diskonpersen;
+        kodeProdukCon.value = model.kodeProduk;
+        namaProdukCon.value = model.namaProduk;
+        unitProdukCon.value = model.unitId;
+        kategoriProdukCon.value = model.kategoriId;
+        stokProdukCon.value = model.stokProduk;
+        hargaSatuanCon.value = model.hargaProduk;
+        persentaseDiskonCon.value = model.diskonPersen;
         orderLevelCon.value = model.reorderlevel;
         fileCon.values = model.fotoProduk ?? [];
       },

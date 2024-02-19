@@ -4,6 +4,10 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/master_data_customer/bindings/master_data_customer_binding.dart';
+import '../modules/master_data_customer/views/master_data_customer_view.dart';
+import '../modules/master_data_customer_setup/bindings/master_data_customer_setup_binding.dart';
+import '../modules/master_data_customer_setup/views/master_data_customer_setup_view.dart';
 import '../modules/master_data_produk/bindings/master_data_produk_binding.dart';
 import '../modules/master_data_produk/views/master_data_produk_view.dart';
 import '../modules/master_data_produk_setup/bindings/master_data_produk_setup_binding.dart';
@@ -101,6 +105,16 @@ class AppPages {
       name: _Paths.MASTER_DATA_PRODUK_SETUP,
       page: () => const MasterDataProdukSetupView(),
       binding: MasterDataProdukSetupBinding(),
+    ),
+    GetPage(
+      name: _Paths.MASTER_DATA_CUSTOMER,
+      page: () => const MasterDataCustomerView(),
+      binding: MasterDataCustomerBinding(),
+    ),
+    GetPage(
+      name: _Paths.MASTER_DATA_CUSTOMER_SETUP,
+      page: () => const MasterDataCustomerSetupView(),
+      binding: MasterDataCustomerSetupBinding(),
     ),
   ];
 }

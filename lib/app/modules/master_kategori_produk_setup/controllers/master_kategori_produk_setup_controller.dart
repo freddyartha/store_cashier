@@ -21,7 +21,7 @@ class MasterKategoriProdukSetupController extends GetxController {
       urlApiDelete: FireStoreQuery.kategoriProdukList,
       bodyApi: (id) => {
         "kategori": kategoriCon.value,
-        "kategoriLowerCase": kategoriCon.value.toString().toLowerCase(),
+        "kategori_lowercase": kategoriCon.value.toString().toLowerCase(),
         "keterangan": keteranganCon.value,
         if (id == null) "createdAt": FieldValue.serverTimestamp(),
         if (id == null) "createdBy": auth.currentUser!.uid,
