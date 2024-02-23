@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/invoice/bindings/invoice_binding.dart';
+import '../modules/invoice/views/invoice_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/master_data_customer/bindings/master_data_customer_binding.dart';
@@ -24,6 +26,8 @@ import '../modules/master_unit_produk/bindings/master_unit_produk_binding.dart';
 import '../modules/master_unit_produk/views/master_unit_produk_view.dart';
 import '../modules/master_unit_produk_setup/bindings/master_unit_produk_setup_binding.dart';
 import '../modules/master_unit_produk_setup/views/master_unit_produk_setup_view.dart';
+import '../modules/penjualan_setup/bindings/penjualan_setup_binding.dart';
+import '../modules/penjualan_setup/views/penjualan_setup_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/setting_page/bindings/setting_page_binding.dart';
@@ -115,6 +119,16 @@ class AppPages {
       name: _Paths.MASTER_DATA_CUSTOMER_SETUP,
       page: () => const MasterDataCustomerSetupView(),
       binding: MasterDataCustomerSetupBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVOICE,
+      page: () => const InvoiceView(),
+      binding: InvoiceBinding(),
+    ),
+    GetPage(
+      name: _Paths.PENJUALAN_SETUP,
+      page: () => const PenjualanSetupView(),
+      binding: PenjualanSetupBinding(),
     ),
   ];
 }

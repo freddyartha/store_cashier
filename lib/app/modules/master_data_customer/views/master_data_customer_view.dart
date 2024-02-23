@@ -43,7 +43,7 @@ class MasterDataCustomerView extends GetView<MasterDataCustomerController> {
                     fontWeight: FontWeight.w600,
                   ),
                   subtitle: TextComponent(
-                    value: item.kodeCustomer,
+                    value: item.tipeCustomer == 1 ? "Member" : "Non Member",
                     isMuted: true,
                   ),
                 ),

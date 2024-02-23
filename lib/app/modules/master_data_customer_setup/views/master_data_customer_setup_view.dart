@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:store_cashier/app/mahas/components/inputs/input_radio_component.dart';
 
 import '../../../mahas/components/inputs/input_text_component.dart';
 import '../../../mahas/components/pages/setup_page_component.dart';
@@ -16,19 +17,18 @@ class MasterDataCustomerSetupView
       controller: controller.formCon,
       children: () => [
         InputTextComponent(
-          controller: controller.kodeCustomerCon,
-          label: "Kode Customer",
-          editable: controller.formCon.editable,
-          isRequired: true,
-          isBorderRectangle: true,
-          marginBottom: 20,
-        ),
-        InputTextComponent(
           controller: controller.namaCustomerCon,
           label: "Nama Customer",
           editable: controller.formCon.editable,
           isRequired: true,
           isBorderRectangle: true,
+          marginBottom: 20,
+        ),
+        InputRadioComponent(
+          controller: controller.tipeCustomerCon,
+          label: "Tipe Customer",
+          editable: controller.formCon.editable,
+          required: true,
           marginBottom: 20,
         ),
         InputTextComponent(

@@ -65,8 +65,15 @@ class MasterDataProdukSetupView
           marginBottom: 20,
         ),
         InputTextComponent(
-          controller: controller.persentaseDiskonCon,
-          label: "Persentase Diskon",
+          controller: controller.diskonNonMemberCon,
+          label: "Diskon Non Member",
+          editable: controller.formCon.editable,
+          isBorderRectangle: true,
+          marginBottom: 20,
+        ),
+        InputTextComponent(
+          controller: controller.diskonMemberCon,
+          label: "Diskon Member",
           editable: controller.formCon.editable,
           isBorderRectangle: true,
           marginBottom: 20,

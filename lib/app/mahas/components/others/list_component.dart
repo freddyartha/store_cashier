@@ -10,16 +10,12 @@ import 'shimmer_component.dart';
 
 class ListComponentController<T> {
   final Function()? addOnTap;
-  final bool allowSearch;
-  final bool isWithAddTap;
   late Function(VoidCallback fn) setState;
   Query<T> query;
 
   ListComponentController({
     required this.query,
-    this.allowSearch = true,
     this.addOnTap,
-    this.isWithAddTap = true,
   });
 
   void init(Function(VoidCallback fn) setStateX) {
@@ -68,7 +64,7 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
         Column(
           children: [
             Visibility(
-              visible: widget.controller.allowSearch,
+              visible: widget.searchTextComponent != null,
               child: MahasWidget.uniformCardWidget(
                 child: Row(
                   children: [
@@ -105,7 +101,7 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
           ],
         ),
         Visibility(
-          visible: widget.controller.isWithAddTap,
+          visible: widget.controller.addOnTap != null,
           child: Column(
             children: [
               const Expanded(child: SizedBox()),

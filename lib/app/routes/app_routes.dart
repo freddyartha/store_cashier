@@ -21,6 +21,8 @@ abstract class Routes {
   static const MASTER_DATA_PRODUK_SETUP = _Paths.MASTER_DATA_PRODUK_SETUP;
   static const MASTER_DATA_CUSTOMER = _Paths.MASTER_DATA_CUSTOMER;
   static const MASTER_DATA_CUSTOMER_SETUP = _Paths.MASTER_DATA_CUSTOMER_SETUP;
+  static const INVOICE = _Paths.INVOICE;
+  static const PENJUALAN_SETUP = _Paths.PENJUALAN_SETUP;
 }
 
 abstract class _Paths {
@@ -40,4 +42,6 @@ abstract class _Paths {
   static const MASTER_DATA_PRODUK_SETUP = '/master-data-produk-setup';
   static const MASTER_DATA_CUSTOMER = '/master-data-customer';
   static const MASTER_DATA_CUSTOMER_SETUP = '/master-data-customer-setup';
+  static const INVOICE = '/invoice';
+  static const PENJUALAN_SETUP = '/penjualan-setup';
 }

@@ -22,7 +22,9 @@ class MasterDataProdukSetupController extends GetxController {
       InputTextController(type: InputTextType.number);
   final InputTextController hargaSatuanCon =
       InputTextController(type: InputTextType.money);
-  final InputTextController persentaseDiskonCon =
+  final InputTextController diskonNonMemberCon =
+      InputTextController(type: InputTextType.number);
+  final InputTextController diskonMemberCon =
       InputTextController(type: InputTextType.number);
   final InputTextController orderLevelCon =
       InputTextController(type: InputTextType.number);
@@ -47,7 +49,8 @@ class MasterDataProdukSetupController extends GetxController {
         "kategori_id": kategoriProdukCon.value,
         "stok_produk": stokProdukCon.value,
         "harga_produk": hargaSatuanCon.value,
-        "diskon_persen": persentaseDiskonCon.value,
+        "diskon_nonmember": diskonNonMemberCon.value,
+        "diskon_member": diskonMemberCon.value,
         "reorder_level": orderLevelCon.value,
         "foto_produk": linkFotoProduk,
         if (id == null) "createdAt": FieldValue.serverTimestamp(),
@@ -87,7 +90,8 @@ class MasterDataProdukSetupController extends GetxController {
         kategoriProdukCon.value = model.kategoriId;
         stokProdukCon.value = model.stokProduk;
         hargaSatuanCon.value = model.hargaProduk;
-        persentaseDiskonCon.value = model.diskonPersen;
+        diskonNonMemberCon.value = model.diskonNonMember;
+        diskonMemberCon.value = model.diskonMember;
         orderLevelCon.value = model.reorderlevel;
         fileCon.values = model.fotoProduk ?? [];
       },

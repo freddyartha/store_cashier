@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:store_cashier/app/mahas/services/mahas_format.dart';
 
 class CustomerModel {
-  String? kodeCustomer;
   String? namaCustomer;
+  int? tipeCustomer;
   String? namaCustomerLowercase;
   String? kontakCustomer;
   String? alamatCustomer;
@@ -22,8 +23,7 @@ class CustomerModel {
 
   static CustomerModel fromDynamic(dynamic dynamicData) {
     final model = CustomerModel();
-
-    model.kodeCustomer = dynamicData['kode_customer'];
+    model.tipeCustomer = MahasFormat.dynamicToInt('tipe_customer');
     model.namaCustomer = dynamicData['nama_customer'];
     model.namaCustomerLowercase = dynamicData['nama_customer_lowercase'];
     model.kontakCustomer = dynamicData['kontak_customer'];
@@ -38,7 +38,7 @@ class CustomerModel {
 
   static Map<String, dynamic> toJSon(CustomerModel data) {
     var mapData = {
-      'kode_customer': data.kodeCustomer,
+      'tipe_customer': data.tipeCustomer,
       'nama_customer': data.namaCustomer,
       'nama_customer_lowercase': data.namaCustomerLowercase,
       'kontak_customer': data.kontakCustomer,
