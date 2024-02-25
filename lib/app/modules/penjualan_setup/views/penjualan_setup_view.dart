@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
+import 'package:store_cashier/app/mahas/components/inputs/input_radio_component.dart';
 import 'package:store_cashier/app/mahas/components/pages/setup_page_component.dart';
 import 'package:store_cashier/app/mahas/components/texts/text_component.dart';
 import 'package:store_cashier/app/mahas/mahas_colors.dart';
@@ -26,7 +27,9 @@ class PenjualanSetupView extends GetView<PenjualanSetupController> {
                 fontWeight: FontWeight.bold,
               ),
               controller.pickedCustomer.value.id != null
-                  ? SizedBox(
+                  ? Container(
+                      margin: const EdgeInsets.only(bottom: 20),
+                      height: 30,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -64,6 +67,13 @@ class PenjualanSetupView extends GetView<PenjualanSetupController> {
                     ),
             ],
           ),
+        ),
+        InputRadioComponent(
+          controller: controller.tipePembayaranCon,
+          label: "Tipe Pembayaran",
+          editable: controller.formCon.editable,
+          required: true,
+          marginBottom: 20,
         ),
         // InputTextComponent(
         //   controller: controller.unitKeteranganCon,

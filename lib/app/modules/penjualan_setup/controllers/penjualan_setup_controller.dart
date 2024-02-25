@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:store_cashier/app/firestore_query/reusable_firestore_query.dart';
+import 'package:store_cashier/app/mahas/components/inputs/input_radio_component.dart';
 import 'package:store_cashier/app/mahas/components/inputs/input_text_component.dart';
 import 'package:store_cashier/app/mahas/components/others/list_component.dart';
 import 'package:store_cashier/app/mahas/components/pages/setup_page_component.dart';
@@ -25,8 +26,21 @@ class ItemModel {
 
 class PenjualanSetupController extends GetxController {
   final InputTextController filterCon = InputTextController();
+  final tipePembayaranCon = InputRadioController(
+    items: [
+      RadioButtonItem(
+        value: 1,
+        text: "Cash",
+      ),
+      RadioButtonItem(
+        value: 2,
+        text: "Card",
+      ),
+    ],
+  );
   late ListComponentController<CustomerModel> listCon;
   late SetupPageController formCon;
+  
 
   Rx<Query<CustomerModel>> customerList =
       FireStoreQuery.customerListDefaultQuery.obs;
@@ -108,7 +122,7 @@ class PenjualanSetupController extends GetxController {
                     fontWeight: FontWeight.w600,
                   ),
                   subtitle: TextComponent(
-                    value: item.tipeCustomer == 1 ? "Member" : 'Non Member',
+                    value: CustomerModel.getTipeCustomer(item.tipeCustomer!),
                     isMuted: true,
                   ),
                 ),

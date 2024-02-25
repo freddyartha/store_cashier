@@ -1,5 +1,7 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 // import 'package:flutter/material.dart';
+// import 'package:store_cashier/app/mahas/components/others/no_internet_component.dart';
 // import 'package:store_cashier/app/mahas/mahas_widget.dart';
 // import '../../mahas_config.dart';
 // import '../../models/api_list_resut_model.dart';
@@ -89,10 +91,10 @@
 //   // }
 
 //   // Future refreshBottom({nextPage = false}) async {
-//     // // final itemsX = await getItems(nextPage: nextPage);
-//     // if (itemsX != null) {
-//     //   _items.addAll(itemsX);
-//     // }
+//   // // final itemsX = await getItems(nextPage: nextPage);
+//   // if (itemsX != null) {
+//   //   _items.addAll(itemsX);
+//   // }
 //   // }
 
 //   // Future<List<T>?> getItems({nextPage = false}) async {
@@ -209,10 +211,10 @@
 //     Navigator.pop(context);
 //   }
 
-//   Widget _itemBuilder(int index) {
+//   Widget _itemBuilder(QueryDocumentSnapshot<T> doc) {
 //     if (itemBuilder != null) {
 //       return itemBuilder!(
-//         _items[index],
+//         _items[doc],
 //         () => itemOnTab(_items[index]),
 //         _itemColor(index),
 //       );
@@ -238,20 +240,19 @@
 //     super.key,
 //     this.title,
 //     required this.controller,
-//     required this.searchTextComponent,
-//     this.setup, 
+//     this.searchTextComponent,
+//     this.setup,
 //   });
 
 //   @override
-//   State<LookupComponent> createState() => _LookupComponentState();
+//   State<LookupComponent<T, U>> createState() => _LookupComponentState<T, U>();
 // }
 
 // class _LookupComponentState<T, U> extends State<LookupComponent<T, U>> {
-
 //   final InputTextComponent? searchTextComponent;
 
-//   _LookupComponentState({required this.searchTextComponent});
-  
+//   _LookupComponentState({this.searchTextComponent});
+
 //   @override
 //   void initState() {
 //     widget.controller._init((fn) {
@@ -293,82 +294,101 @@
 //                   : Column(
 //                       crossAxisAlignment: CrossAxisAlignment.stretch,
 //                       children: [
+//                         // Visibility(
+//                         //   visible: widget.searchTextComponent != null,
+//                         //   child: InputTextComponent(
+//                         //     borderRadius: Radius.zero,
+//                         //     placeHolder: 'Search',
+//                         //     controller: widget.controller._filterController,
+//                         //   ),
+//                         // ),
 //                         Visibility(
-//                           visible: widget.controller.allowFilter,
-//                           child: InputTextComponent(
-//                             borderRadius: Radius.zero,
-//                             placeHolder: 'Search',
-//                             controller: widget.controller._filterController,
+//                           visible: widget.searchTextComponent != null,
+//                           child: MahasWidget.uniformCardWidget(
+//                             child: Row(
+//                               children: [
+//                                 const Icon(
+//                                   Icons.search_rounded,
+//                                   size: 25,
+//                                   color: MahasColors.greyFontColor,
+//                                 ),
+//                                 Expanded(
+//                                   child:
+//                                       Center(child: widget.searchTextComponent),
+//                                 ),
+//                               ],
+//                             ),
 //                           ),
 //                         ),
-//                         Visibility(
-//               visible: widget.controller.allowFilter,
-//               child: MahasWidget.uniformCardWidget(
-//                 child: Row(
-//                   children: [
-//                     const Icon(
-//                       Icons.search_rounded,
-//                       size: 25,
-//                       color: MahasColors.greyFontColor,
-//                     ),
-//                     Expanded(
-//                       child: Center(child: widget.searchTextComponent),
-//                     ),
-//                   ],
+//                         Expanded(
+//               child: FirestoreListView<T>(
+//                 query: widget.controller.query,
+//                 emptyBuilder: (context) => const EmptyComponent(),
+//                 loadingBuilder: (context) => const Padding(
+//                   padding: EdgeInsets.only(top: 5),
+//                   child: ShimmerComponent(),
 //                 ),
+//                 errorBuilder: (context, error, stackTrace) {
+//                   return NoInternetConnectionPage(
+//                     message: error.toString(),
+//                   );
+//                 },
+//                 itemBuilder: (context, doc) {
+//                   return widget.controller._itemBuilder(doc.);
+//                 },
 //               ),
 //             ),
-//                         Expanded(
-//                           child: RefreshIndicator(
-//                             onRefresh: widget.controller.refreshItems,
-//                             child: widget.controller._isItemRefresh
-//                                 ? const ShimmerComponent()
-//                                 : widget.controller._items.isEmpty &&
-//                                         !widget.controller._isItemRefresh
-//                                     ? EmptyComponent(
-//                                         onPressed:
-//                                             widget.controller.refreshItems)
-//                                     : ListView.separated(
-//                                         separatorBuilder: (context, index) =>
-//                                             const Divider(height: 0),
-//                                         controller: widget
-//                                             .controller._listViewController,
-//                                         physics:
-//                                             const AlwaysScrollableScrollPhysics(),
-//                                         itemCount:
-//                                             widget.controller._items.length +
-//                                                 (MahasConfig.isLaravelBackend
-//                                                     ? 1
-//                                                     : 0),
-//                                         itemBuilder: (context, index) {
-//                                           if (index ==
-//                                               widget.controller._items.length) {
-//                                             return Visibility(
-//                                               visible: widget.controller
-//                                                           ._pageIndex !=
-//                                                       widget.controller
-//                                                           ._maxPage &&
-//                                                   widget.controller._items
-//                                                       .isNotEmpty,
-//                                               child: Container(
-//                                                 margin:
-//                                                     const EdgeInsets.all(10),
-//                                                 child: const Center(
-//                                                   child:
-//                                                       CircularProgressIndicator(),
-//                                                 ),
-//                                               ),
-//                                             );
-//                                           } else {
-//                                             return Container(
-//                                               child: widget.controller
-//                                                   ._itemBuilder(index),
-//                                             );
-//                                           }
-//                                         },
-//                                       ),
-//                           ),
-//                         ),
+//                         // Expanded(
+//                         //   child: RefreshIndicator(
+//                         //     onRefresh: widget.controller.refreshItems,
+//                         //     child: widget.controller._isItemRefresh
+//                         //         ? const ShimmerComponent()
+//                         //         : widget.controller._items.isEmpty &&
+//                         //                 !widget.controller._isItemRefresh
+//                         //             ? EmptyComponent(
+//                         //                 onPressed:
+//                         //                     widget.controller.refreshItems)
+//                         //             : ListView.separated(
+//                         //                 separatorBuilder: (context, index) =>
+//                         //                     const Divider(height: 0),
+//                         //                 controller: widget
+//                         //                     .controller._listViewController,
+//                         //                 physics:
+//                         //                     const AlwaysScrollableScrollPhysics(),
+//                         //                 itemCount:
+//                         //                     widget.controller._items.length +
+//                         //                         (MahasConfig.isLaravelBackend
+//                         //                             ? 1
+//                         //                             : 0),
+//                         //                 itemBuilder: (context, index) {
+//                         //                   if (index ==
+//                         //                       widget.controller._items.length) {
+//                         //                     return Visibility(
+//                         //                       visible: widget.controller
+//                         //                                   ._pageIndex !=
+//                         //                               widget.controller
+//                         //                                   ._maxPage &&
+//                         //                           widget.controller._items
+//                         //                               .isNotEmpty,
+//                         //                       child: Container(
+//                         //                         margin:
+//                         //                             const EdgeInsets.all(10),
+//                         //                         child: const Center(
+//                         //                           child:
+//                         //                               CircularProgressIndicator(),
+//                         //                         ),
+//                         //                       ),
+//                         //                     );
+//                         //                   } else {
+//                         //                     return Container(
+//                         //                       child: widget.controller
+//                         //                           ._itemBuilder(index),
+//                         //                     );
+//                         //                   }
+//                         //                 },
+//                         //               ),
+//                         //   ),
+//                         // ),
 //                         ElevatedButton(
 //                           onPressed: widget.controller.insertFromListOnPress,
 //                           style: ElevatedButton.styleFrom(

@@ -32,6 +32,7 @@ class MasterDataCustomerView extends GetView<MasterDataCustomerController> {
             ),
             itemBuilder: (e) {
               var item = e.data();
+              print(item.tipeCustomer);
               return MahasWidget.uniformCardWidget(
                 margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                 padding: const EdgeInsets.all(0),
@@ -43,7 +44,7 @@ class MasterDataCustomerView extends GetView<MasterDataCustomerController> {
                     fontWeight: FontWeight.w600,
                   ),
                   subtitle: TextComponent(
-                    value: item.tipeCustomer == 1 ? "Member" : "Non Member",
+                    value: CustomerModel.getTipeCustomer(item.tipeCustomer),
                     isMuted: true,
                   ),
                 ),

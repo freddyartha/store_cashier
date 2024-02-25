@@ -49,6 +49,7 @@ class MasterDataCustomerSetupController extends GetxController {
       apiToView: (json) {
         var model = CustomerModel.fromDynamic(json);
         namaCustomerCon.value = model.namaCustomer;
+        tipeCustomerCon.value = model.tipeCustomer;
         kontakCustomerCon.value = model.kontakCustomer;
         alamatCustomerCon.value = model.alamatCustomer;
       },

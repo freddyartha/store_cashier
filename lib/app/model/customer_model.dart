@@ -23,7 +23,7 @@ class CustomerModel {
 
   static CustomerModel fromDynamic(dynamic dynamicData) {
     final model = CustomerModel();
-    model.tipeCustomer = MahasFormat.dynamicToInt('tipe_customer');
+    model.tipeCustomer = MahasFormat.dynamicToInt(dynamicData['tipe_customer']);
     model.namaCustomer = dynamicData['nama_customer'];
     model.namaCustomerLowercase = dynamicData['nama_customer_lowercase'];
     model.kontakCustomer = dynamicData['kontak_customer'];
@@ -49,5 +49,9 @@ class CustomerModel {
       'updatedBy': data.updatedBy,
     };
     return mapData;
+  }
+
+  static String getTipeCustomer(int? tipe) {
+    return tipe == 1 ? 'Member' : 'Non Member';
   }
 }
